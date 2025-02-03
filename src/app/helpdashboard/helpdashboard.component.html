@@ -1,0 +1,37 @@
+
+<div id="helpdashOuterDiv">
+   
+   <h4 style="font-weight: 600; margin-left: 64px;" >
+    <i (click)="closeDashboard()" class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>  Help Dashboard
+   </h4>
+   <div class="helpDashboardTable">
+    <p-table [value]="helpdashboarddata" [tableStyle]="{'width': '97%','margin-top':'20px'}">
+        <ng-template pTemplate="header">
+            <tr >
+                <th>Ticket ID</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Created by</th>
+                <th>Time</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-helpdashboarddata>
+            <tr>
+                <td class="helpDashTd ticketIdData">{{ helpdashboarddata.ticketId }}</td>
+                <td class="helpDashTd">{{ helpdashboarddata.title }}</td>
+                <td> <p-tag class="helpDashTd" [ngClass]="{
+                    'reopened-status': helpdashboarddata.Status === 'Reopened',
+                    'closed-status': helpdashboarddata.Status === 'Closed',
+                    'in-progress': helpdashboarddata.Status === 'In-Progress',
+                    'new': helpdashboarddata.Status==='New'
+                  }">{{ helpdashboarddata.Status }}</p-tag></td>
+                <td><p-tag class="helpDashTd" [ngStyle]="{ 'background-color': helpdashboarddata.Priority === 'High' ? '#FFCDD2' : 'transparent',color:'#D50000'}">{{ helpdashboarddata.Priority }} </p-tag></td>
+                <td class="helpDashTd">{{ helpdashboarddata.CreatedBy }}</td>
+                <td class="helpDashTd">{{ helpdashboarddata.Time }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+   </div>
+</div>

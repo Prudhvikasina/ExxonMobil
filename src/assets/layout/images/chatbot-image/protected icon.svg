@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 16 18">
+  <g id="protected_icon" data-name="protected icon" transform="translate(1 1)">
+    <g id="Free-Icons">
+      <g id="Group">
+        <g id="Shape">
+          <path id="Path_4" data-name="Path 4" d="M10,3,4,5.3v4.61c0,3,3.051,5.756,6,6.585,2.949-.83,6-3.589,6-6.585V5.3Z" transform="translate(-4 -3)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill-rule="evenodd"/>
+        </g>
+      </g>
+    </g>
+    <path id="check-circle-fill" d="M8,4A4,4,0,1,1,4,0,4,4,0,0,1,8,4ZM6.015,2.485a.375.375,0,0,0-.54.011L3.738,4.709,2.692,3.662a.375.375,0,0,0-.53.53L3.485,5.515a.375.375,0,0,0,.54-.01l2-2.495a.375.375,0,0,0-.005-.525Z" transform="translate(7 9)" fill="#fff"/>
+  </g>
+</svg>

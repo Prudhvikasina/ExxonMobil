@@ -1,0 +1,41 @@
+.accer {
+    
+    text-align: center;
+    padding:6%; background: #fff;
+    margin:50px; box-sizing: border-box;
+}
+.accer .accer-tile { font-size: 30px;
+    color: #ff0000;
+     }
+.accer .accer-desc { font-size: 15px;  padding: 20px;}
+.accer .acctxt { font-size: 80px; font-weight: 800; }
+
+
+.exception-body{
+    height: 100%;
+    width: 100vw;
+    /* border: 1px solid red; */
+}
+.exception-body .exception-panel{
+    height: 30%;
+    width: 100%;
+    /* border: 1px solid green; */
+    margin-top: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.exception-body .exception-panel .exception-detail{
+    display: flex;
+    flex-direction: column;
+}
+
+.exception-detail h1{
+    text-align: center;
+    margin-top: 15px;
+}
+.exception-detail p{
+    text-align: center;
+}

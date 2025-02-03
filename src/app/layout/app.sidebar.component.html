@@ -1,0 +1,192 @@
+<div class="layout-sidebar " (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+    <div class="layout-sidebar-top">
+        <button class="layout-sidebar-anchor p-link" type="button" (click)="anchor()"></button>
+    </div>
+    <!-- <app-menu-profile #menuProfileStart *ngIf="menuProfilePosition === 'start'"></app-menu-profile> -->
+    <div #menuContainer class="layout-menu-container">
+        <!-- <app-menu></app-menu> -->
+        <div class=" topichead">
+            <span>Topic</span> <div (click)="showcreatetopicsDialog()"><img src="../../assets/layout/images/chatbot-image/add chat icon.svg" alt=""> </div>
+        </div>
+        <div class="topicfilter">
+            <div class="filtericon">
+                <span class="block " (click)="op1.toggle($event)">
+                    <img src="../../assets/layout/images/chatbot-image/fliter.svg" alt="">
+                </span>
+            </div>
+            <div class="inputfilter">
+                <input type="text">
+            </div>
+        </div>
+
+
+
+<p-table [value]="topicsdata">
+    <ng-template pTemplate="body" let-topicsdata>
+        <tr class="bg-transparent ">
+            <td class="border-none py-1">
+                <div class="topic" >
+                    <img src="../../assets/layout/images/chatbot-image/chat-square-text.svg" width="18" alt="">
+                    <div class="topic_name text-white" pTooltip="{{ topicsdata.topicname }}" tooltipPosition="bottom" >
+                        {{ topicsdata.topicname }}
+                    </div>
+            
+                    <div class="align-content-center actionsfortopic">
+                        <button class="pi pi-ellipsis-h text-white bg-transparent border-none ml-2 cursor-pointer"
+                            (click)="op.toggle($event)"></button>
+                        <button class="text-white bg-transparent cursor-pointer border-none pt-2 ml-1">
+                            <img src="../../assets/layout/images/chatbot-image/archive-fill.svg" alt="archive" class="m-0 ">
+                        </button>
+                        <button class="pi pi-user-plus text-white bg-transparent border-none cursor-pointer text-lg mt-1 mr-2"
+                            (click)="showDialog()"></button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+
+
+        <!-- <div class="topic" >
+            <img src="../../assets/layout/images/chatbot-image/chat-square-text.svg" width="18" alt="">
+            <div class="topic_name" pTooltip="Vendor Information" tooltipPosition="bottom"> -->
+                <!-- <p>{{topicsdata.topicname}}</p> -->
+            <!-- </div> -->
+    
+            <!-- <div class="align-content-center actionsfortopic">
+                <button class="pi pi-ellipsis-h text-white bg-transparent border-none ml-2 cursor-pointer"
+                    (click)="op.toggle($event)"></button>
+                <button class="text-white bg-transparent cursor-pointer border-none pt-2 ml-1">
+                    <img src="../../assets/layout/images/chatbot-image/archive-fill.svg" alt="archive" class="m-0 ">
+                </button>
+                <button class="pi pi-user-plus text-white bg-transparent border-none cursor-pointer text-lg mt-1"
+                    (click)="showDialog()"></button>
+            </div>
+        </div> -->
+
+    </div>
+
+
+
+    <app-menu-profile #menuProfileEnd *ngIf="menuProfilePosition === 'end'"></app-menu-profile>
+</div>
+
+
+
+
+<p-dialog header="Header" [(visible)]="visible" [style]="{width: '50vw'}" [resizable]="true" [modal]="true">
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+</p-dialog>
+
+
+<p-overlayPanel #op>
+    <img src="https://primefaces.org/cdn/primeng/images/demo/product/bamboo-watch.jpg" alt="product" />
+</p-overlayPanel>
+
+<p-overlayPanel #op1 class="p-0">
+    <div class=" filtesoption"><span class="block"><input type="checkbox"></span> <span class="block inputheading"> All Topics </span></div>
+    <div class=" filtesoption"><span class="block"><input type="checkbox"></span> <span class="block inputheading"> My Topics - All </span></div>
+    <div class=" filtesoption"><span class="block"><input type="checkbox"></span> <span class="block inputheading"> My Topics - Shared </span></div>
+    <div class=" filtesoption"><span class="block"><input type="checkbox"></span> <span class="block inputheading"> My Topics - Not Shared </span></div>
+    <div class=" filtesoption"><span class="block"><input type="checkbox"></span> <span class="block inputheading"> Other's Topics </span></div>
+    <div class=" filtesoption"><span class="block"><input type="checkbox"></span> <span class="block inputheading" > Featured Topics </span></div>
+</p-overlayPanel>
+
+
+
+<p-dialog header="Add Topic" [(visible)]="createtopicvisible" [style]="{width: '50vw'}" [draggable]="false" [resizable]="true" [modal]="true">
+    <form [formGroup]="addtopicform" (ngSubmit)="addtopicformsubmit()">
+    <p-tabView>
+        
+        <p-tabPanel header="Filter">
+           
+            
+                <div class="formwrap">
+                    <div class="inputwrap">
+                        <label> Topic Name <span class="text-red-500 ">*</span> : </label>
+                        <input type="text" pInputText formControlName="topicname">
+                    </div>
+            
+                    <div class="inputwrap">
+                        <label> Claim Type <span class="text-red-500">*</span> : </label>
+
+                        <p-dropdown [options]="countries"  class="customdesign" optionLabel="name" [filter]="true" [showClear]="true" placeholder="Select a City" formControlName="claimtype" [style]="{width:'100%' }"> </p-dropdown>
+                        
+                    </div>
+
+                    <!-- <div class="inputwrap">
+                        <label> Vendor Name  : </label>
+                        <p-dropdown [options]="countries"  class="customdesign" optionLabel="name" [filter]="true" [showClear]="true" placeholder="Select a City" formControlName="vendorname" [style]="{width:'100%' }"> </p-dropdown>
+                    </div> -->
+                    
+            
+                    <!-- <div class="inputwrap">
+                        <label> Audit Year <span class="text-red-500">*</span> : </label>
+                        <p-multiSelect [options]="countries" [(ngModel)]="selectedCountries" optionLabel="name" placeholder="Select" class="h-2rem" scrollHeight="180px" class="customdesign" [style]="{width:'100%' }" formControlName="audityear" ></p-multiSelect>
+                        <p-calendar view="year" dateFormat="yy" inputId="yearpicker" formControlName="audityear"></p-calendar>
+                        
+                        <p-dropdown [options]="countries"  class="customdesign" optionLabel="name" [filter]="true" [showClear]="true" placeholder="Select a City" formControlName="audityear" [style]="{width:'100%' }"> </p-dropdown>
+
+
+                    </div>
+
+                    <div class="inputwrap">
+                        <label> Region : </label>
+                        <input type="text" pInputText formControlName="region">
+                    </div>
+            
+                    <div class="inputwrap">
+                        <label> Category Claim  : </label>
+                        <input type="text" pInputText formControlName="categoryclaim">
+                    </div>
+
+                    <div class="inputwrap">
+                        <label> Department No  : </label>
+                        <input type="text" pInputText formControlName="departmentno">
+                    </div>
+            
+                    <div class="inputwrap">
+                        <label> Vendor Number : </label>
+                        <input type="text" pInputText formControlName="vendorno" >
+                    </div>
+
+                    <div class="inputwrap" >
+                        <label> Item Number : </label>
+                        <input type="text" pInputText formControlName="itemnumber">
+                    </div>
+             -->
+                    <div class="inputwrap">
+                        <label> Feature: </label>
+                        <input type="text" pInputText formControlName="feature">
+                    </div>
+
+                    
+                </div>
+            
+
+
+
+        </p-tabPanel>
+
+
+
+
+        <p-tabPanel header="Add User">
+            <p>
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+                ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+            </p>
+        </p-tabPanel>
+    </p-tabView>
+
+    <div class="block text-right">
+        <button class="submitbtn" type="submit">Submit</button>
+        <button class="canclebtn" (click)="closeaddtopic()">Cancel</button>
+    </div>
+    </form>
+</p-dialog>

@@ -1,0 +1,306 @@
+.message-container {
+    // padding: 12px;
+    // border-radius: 8px;
+    
+   
+    // margin: 10px 0;
+
+    h2{
+      font-size: 1.2rem;
+    }
+    p{
+      font-size: 18px;
+      line-height: 21px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    ul li{
+      list-style: disc;
+    }
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    padding-left: 1rem;
+    margin-bottom: 8px;
+
+    .chat-image {
+      width: 80%;    // Adjust width as needed
+      height: auto;    // Keeps the aspect ratio based on the width
+      max-width: 100%; // Ensures it doesn't overflow its container
+      object-fit: cover; // Ensures the image covers the area without distortion
+      border-radius: 8px; // Optional: gives rounded corners
+    }
+    // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+    // table {
+    //   width: 100%;
+      
+     
+    //   border-radius: 5px;
+    // //   overflow: hidden;
+    //   border: 3px solid black; // Thicker border for the table, with a blue color
+  
+    //   th,
+    //   td {
+    //     border: 2px solid black; // Matching border color and slightly thicker for each cell
+    //     padding: 10px;
+    //     text-align: left;
+    //     font-size: 0.85em;
+    //   }
+  
+    //   th {
+    //     border: 2px solid black;
+    //      // Light blue header background
+    //     font-weight: 600;
+    //   }
+  
+    //   td {
+    //     border: 2px solid black;
+    //   }
+  
+    //   tr:nth-child(even) td {
+    //     border: 2px solid black;
+    //   }
+  
+    //   tr:hover td {
+    //     border: 2px solid black;
+    //   }
+    // }
+
+    .latex-inline {
+        font-size: 1em; // Inline LaTeX styling
+      }
+      
+      .latex-block {
+        text-align: center; // Center block LaTeX
+        margin: 1em 0; // Add margin for spacing
+      }
+      
+
+      table {
+        width: 100%;
+        border-collapse: collapse !important;
+        margin-top: 20px !important;
+        margin: 0.8rem;
+      }
+      
+      th, td {
+        border: 1px solid black !important;
+        padding: 10px !important;
+        text-align: center !important;
+        font-size: 16px;
+      }
+      
+      th {
+        // background-color: #f2f2f2 !important; 
+        /* Light gray background for header */
+      }
+      
+      tbody tr:hover {
+        // background-color: #f5f5f5 !important; 
+        /* Highlight row on hover */
+      }
+      .link {
+        text-decoration: underline; /* Ensures links are underlined */
+        color: blue; /* Optional: Change link color */
+    }
+    
+    .link:hover {
+        text-decoration: none; /* Optional: Remove underline on hover for a different effect */
+        color: darkblue; /* Optional: Change color on hover */
+    }
+  
+    }
+
+   
+
+  // table {
+  //   width: 100% !important;
+  //   border-collapse: collapse !important;
+  //   margin-top: 20px !important;
+  // }
+  
+  // th, td {
+  //   border: 1px solid black !important;
+  //   padding: 8px !important;
+  //   text-align: left !important;
+  // }
+  
+  // th {
+  //   background-color: #f2f2f2 !important; /* Light gray background for header */
+  // }
+  
+  // tbody tr:hover {
+  //   background-color: #f5f5f5 !important; /* Highlight row on hover */
+  // }
+
+  .specialtext {
+
+    padding-left: 2rem;
+    font-weight: 400;
+  }
+
+  // image container
+
+  .image-container{
+
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    padding-left: 1rem;
+    margin-bottom: 8px;
+
+    h4{
+      font-size: 1.2rem;
+    }
+    span{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 10px;
+    }
+    span >img{
+      width: 50%;
+    }
+  }
+
+
+  ::ng-deep .chat-image{
+          display: inline-block !important;
+          width: 100% !important;
+  }
+  .doc-link {
+    color: #007bff;
+    font-size: 12px;
+  }
+  
+  .doc-link i {
+    margin-left: 5px;
+    color: #007bff;
+  }
+  
+  // .doc-link:hover i {
+  //   color: #ffffff;
+  //   background-color: #002d5c;
+  //   padding: 5px;
+  //   border-radius: 10px;
+  // }
+  
+  .doc-link.active {
+    color: #ffffff !important;
+    background-color: #2028be;
+    padding: 4px;
+    border-radius: 50px;
+  
+  }
+  
+  .doc-link.active i {
+    color: #ffffff; /* Icon color changes to white when active */
+  }
+
+
+  
+  .side-menu-content {
+    overflow-y: auto;
+    max-height: 100%;
+  }
+
+
+  .message-container {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  /* Image Section */
+  .image-container {
+    margin-top: 10px;
+  }
+  
+  .chat-image {
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Side Menu Styling */
+  .side-menu {
+    position: fixed;
+    top: 0;
+    right: -351px;
+    width: 271px;
+    height: 100%;
+    background-color: #ffffff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease;
+    padding: 20px;
+    z-index: 1000;
+    margin-top: 116px;
+  }
+  
+  .side-menu.open {
+    right: 0; /* Slide into view */
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    // background: red;
+    color: rgb(173, 173, 173);
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: none;
+  }
+  ol {
+    list-style-type: none; /* Hides the default numbering */
+    font-size: 18px;
+      line-height: 21px;
+      font-weight: 500;
+      margin-bottom: 8px;
+  }
+  
+  ol li::before {
+    content: ''; /* Prevents displaying numbers or you can add custom content here */
+    font-size: 18px;
+      line-height: 21px;
+      font-weight: 500;
+      margin-bottom: 8px;
+  }
+  
+  .Link-textsidemenu{
+    font-size: 14px;
+    color: black;
+    font-weight: 500;
+  }
+
+  .DocumentsText{
+    color: #2028be;
+    font-size: 12px !important;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+
+  .DocumentURLDisplay {
+    
+    font-size: 14px !important;
+    max-height: 622px;   /* Set the max height of the div */
+    overflow-y: scroll;  /* Always show the scrollbar */
+    padding-right: 10px; /* Optional: Add padding to ensure the content doesn't overlap the scrollbar */
+  }
+  
+  /* Custom scrollbar styling */
+  .DocumentURLDisplay::-webkit-scrollbar {
+    width: 5px; /* Narrow scrollbar width */
+  }
+  
+  .DocumentURLDisplay::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);  /* Color of the scrollbar thumb */
+    border-radius: 10px;  /* Rounded corners for the scrollbar */
+  }
+  
+  .DocumentURLDisplay::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the scrollbar track */
+  }
+
+  

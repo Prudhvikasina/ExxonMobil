@@ -1,0 +1,80 @@
+<div class="chat-container" (click)="toggleCollapsePinned()">
+    <h6 *ngIf="pinnedTopics">
+      <i [class]="isCollapsedPinned ? 'fa fa-caret-right' : 'fa fa-caret-down'"></i>
+      Pinned 
+    </h6>
+  </div>
+  
+  <p-table [value]="pinnedTopics" 
+    [rowHover]="true"
+    [ngStyle]="{ 'margin-top': '100px' }" 
+    id="pinnedTopicsTable" 
+    [class.collapse]="isCollapsedPinned">
+    <ng-template pTemplate="body" let-pinnedTopic>
+      <tr class="bg-transparent p-0">
+        <td class="border-none py-1" style="padding: 0;">
+          <div class="topic" pTooltip="{{ pinnedTopic.TopicName }}">
+            <img src="../../assets/demo/images/new_img_knowledge_base/message_icon.png" alt="">
+            
+            <!-- Edit input -->
+            <input *ngIf="isEditing && editedTopicId === pinnedTopic.TopicId"
+              [(ngModel)]="pinnedTopic.TopicName"
+              (blur)="saveTopic(pinnedTopic.TopicId, pinnedTopic.TopicName)"
+              (keyup.enter)="saveTopic(pinnedTopic.TopicId, pinnedTopic.TopicName)"
+              style="max-width: 350px; font-weight: 500; font-size: larger; border: none; padding: 5px; outline: none;" />
+              
+            <!-- Topic name display -->
+            <div class="topic_name cursor-pointer"  
+              *ngIf="!isEditing || editedTopicId !== pinnedTopic.TopicId"
+              (click)="calltoggle(pinnedTopic.TopicName, pinnedTopic.TopicId)"
+              style="max-width: 350px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; font-weight: 500; font-size: 15px;line-height: 1.5rem;">
+              {{ pinnedTopic.TopicName }}
+            </div>
+            
+            <!-- Actions menu -->
+            <div class="align-content-center actionsfortopic">
+              <div class="pi pi-ellipsis-v text-black bg-transparent border-none ml-1 cursor-pointer"
+                (click)="showOverlayPanel($event, op, pinnedTopic)">
+              </div>
+              <p-overlayPanel #op [style]="{ width: '180px' }">
+                <div *ngIf="selectedTopic" class="topics_modal_outerDiv">
+                  <ul>
+                    <li>
+                      <a (click)="unpinTopic(pinnedTopic)">
+                        <i class="fa-solid fa-thumbtack"></i>
+                        <span>Unpin</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a (click)="enableEditing(pinnedTopic.TopicId)">
+                        <i class="pi pi-pencil"></i>
+                        <span>Rename</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a (click)="exportToPdf(pinnedTopic.TopicName, pinnedTopic.TopicId, $event)">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Download as PDF</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a (click)="archiveTopicSidebar(pinnedTopic.TopicName, pinnedTopic.TopicId)">
+                        <i class="pi pi-inbox"></i>
+                        <span>Archive</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a (click)="deleteTopicSidebar(pinnedTopic.TopicName, pinnedTopic.TopicId)">
+                        <i class="pi pi-trash"></i>
+                        <span>Delete</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </p-overlayPanel>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>

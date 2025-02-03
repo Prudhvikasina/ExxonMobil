@@ -1,0 +1,1488 @@
+<div class="h-full relative" [ngClass]="{ 'changewidthnew': customwidth, 'changewidth': !customwidth,  }">
+
+    <div [ngClass]="customwidth ? 'changewidthnewNav' : 'changewidthNav'" class="layout-topbar">
+        <div class="layout-topbar-end">
+            <div class="layout-topbar-actions-start">
+
+            </div>
+            <div class="layout-topbar-actions-end">
+
+                <div class="searchDivOuter ">
+                    <div *ngIf="chatMessagesFromChild.length>0" class="search-container-new"
+                        [class.active]="isSearchActive">
+                        <input type="text" (input)="searchChat($event)" class="search-input" placeholder="Search..." />
+                        <!-- <span class="search-icon" >🔍</span> -->
+
+                        <i pTooltip="Search" tooltipPosition="bottom" class="fa-solid fa-magnifying-glass search-icon"
+                            (click)="toggleSearch()"></i>
+
+                        <!-- <i  class="fa fa-link link-icon mx-4" aria-hidden="true"></i> -->
+                        <i class="fa fa-share-alt sharedicon mx-2" aria-hidden="true" (click)="SharedDialog()"></i>
+                    </div>
+                </div>
+
+                <ul class="layout-topbar-items">
+
+
+                    <li class="relative" (click)="opBell.toggle($event); getNotifications();">
+                        <span class="wedget-notification" *ngIf="notificationTotalCount > 0">{{ notificationTotalCount
+                            }}</span>
+                        <a pStyleClass="@next" enterClass="ng-hidden" enterActiveClass="px-scalein"
+                            leaveToClass="ng-hidden" leaveActiveClass="px-fadeout" [hideOnOutsideClick]="true" pRipple
+                            pTooltip="Notifications" tooltipPosition="bottom">
+                            <!-- <i class="pi pi-bell text-2xl"></i> -->
+                            <img src="../../assets/layout/images/exxon_mobil/bell_icon.png" alt="">
+                        </a>
+
+                    </li>
+
+
+                    <li (click)="opLogout.toggle($event)" pTooltip="Profile" tooltipPosition="bottom">
+                        <div class="logout-bg">
+                            <div class="username-text logoutInnerDiv">
+                                <!-- <i class="fa fa-user-circle-o" aria-hidden="true"></i>  -->
+                                <!-- {{ getTrimmedShortAliasName()
+                                }} -->
+                                <img class="" style="border-radius: 50px;"
+                                    src="../../assets/layout/images/loggedUserimage.JPG">
+                            </div>
+                            <!-- <i class="fa fa-chevron-up p-3" aria-hidden="true" data-bs-toggle="dropdown"></i> -->
+                            <!-- <ul class="dropdown-menu user_icon_modal" style="cursor: pointer;">
+                                <li style="cursor: pointer;">
+                                    <a class="dropdown-item" (click)="logout()">
+                                        <i class="pi pi-sign-out"></i> Logout</a>
+                                </li>
+                            </ul> -->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <p-dialog [(visible)]="filtermainvisible" [style]="{width: '50vw'}" [draggable]="false" [resizable]="true"
+        [modal]="true" [maximizable]="true">
+        <ng-container *ngIf="topicDetailsToDisplay && topicDetailsToDisplay.length > 0">
+            <div *ngFor="let detail of topicDetailsToDisplay" class="">
+                <div class="row" style="font-size: 18px;">
+                    <div class="col-md-3">
+                        <p class="font-bold">TopicName :</p>
+                    </div>
+                    <div class="col-md-3">
+                        <p class="font-bold mt-2"
+                            style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{
+                            detail.TopicName }}</p>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!topicDetailsToDisplay || topicDetailsToDisplay.length === 0">
+            <p>No details available</p>
+        </ng-container>
+    </p-dialog>
+
+
+
+    <app-chatbox *ngIf="!isactivity && !isHelpDashboard" [topicId]="topicIdnew" [userId]="userId"
+        (greetEvent)="callnewchaticon()" (topicUpdated)="updateTopic($event)" [isToggled]="isToggled"
+        [trimmedAlias]="getTrimmedShortAliasName()" (chatMessagesChange)="receiveChatMessages($event)"
+        [chatMessageFilter]="chatMessageArray" [sidebarVisible]="sidebarVisible"></app-chatbox>
+    <div class="activityOuter">
+        <app-activity *ngIf="isactivity && !isHelpDashboard" [topicsdata]="topicsdata" (close)="handleActivityClose()"
+            [topicsdataToday]="topicsdataToday" [topicsdataYesderday]="topicsdataYesderday"
+            [topicsdatePrevios]="topicsdatePrevios" (variableEmitter)="updateVariable($event)"
+            (searchTopicsActivity)="searchTopicsActivity($event)" [filteredActivityValue]="filteredActivityValue"
+            (topicIdActityData)="topicIdActityDataHandle($event)"
+            (topicNameActivityData)="topicNameActivityDataHandle($event)"></app-activity>
+    </div>
+
+    <app-helpdashboard *ngIf="isHelpDashboard" (closeHelpDashboard)="onCloseHelpDashboard()"></app-helpdashboard>
+
+</div>
+
+
+<!-- sidebar visual start here -->
+
+<p-sidebar #sidebarRef [(visible)]="sidebarVisible" [ngClass]="{'closed-sidebar': !sidebarVisible}" styleClass="w-22rem"
+    [ngStyle]="{'background-color': isToggled ? sidebarBackgroundColorClose : sidebarBackgroundColor}"
+    style="padding: 0;" [showCloseIcon]="false" [modal]="false">
+
+
+
+
+    <div class="newchatOuter">
+        <button [disabled]="!new_chat" [ngClass]="{'disabled-button': !new_chat}" (click)="callnewchat()"
+            pTooltip="New Chat" tooltipPosition="right">
+            <i class="pi pi-plus" style="font-size: 1rem"></i>
+            <p>
+                New Chat
+            </p>
+        </button>
+    </div>
+
+    <div style="position: absolute; top: -22px; right: 10px;" pTooltip="Collapse menu" tooltipPosition="bottom"
+        (click)="toggleSidebar()">
+        <!-- <button class="new-chat-button_new" [disabled]="!new_chat" [ngClass]="{'disabled-button': !new_chat}"
+        (click)="callnewchat()" pTooltip="New chat" tooltipPosition="bottom">
+        <i class="fa-regular fa-pen-to-square" style="font-size: 1.5rem;"></i>
+
+    </button> -->
+        <span>
+            <!-- <i [ngClass]="sidebarVisible ? 'fa fa-chevron-left' : 'fa fa-chevron-right'" aria-hidden="true"></i> -->
+            <!-- <i class="pi pi-bars" style="font-size: 1.5rem;" aria-hidden="true"></i> -->
+        </span>
+    </div>
+
+
+
+
+    <div class="chat-container" (click)="toggleCollapsePinned()">
+        <!-- For After click pin only showing pinned text -->
+        <!-- <h6 *ngIf="pinnedTopics.length > 0"> -->
+        <h6 *ngIf="pinnedTopics.length > 0">
+            <i [class]="isCollapsedPinned ? 'fa fa-caret-right' : 'fa fa-caret-down'"></i>
+            Pinned Chat
+        </h6>
+    </div>
+
+    <p-table [value]="pinnedTopics" #pinnedTable [rowHover]="true" [ngStyle]="{ 'margin-top': '100px' }"
+        id="pinnedTopicsTable" [class.collapse]="isCollapsedPinned">
+        <ng-template pTemplate="body" let-pinnedTopic>
+            <tr class="bg-transparent p-0">
+                <td class="border-none py-1" style="padding: 0;">
+                    <div class="topic" pTooltip="{{ pinnedTopic.TopicName }}">
+                        <img src="../../assets/layout/images/message_icon.png" alt="topic_data_icon">
+
+                        <!-- Add input field for editing -->
+                        <input *ngIf="isEditing && editedTopicId === pinnedTopic.TopicId"
+                            [(ngModel)]="pinnedTopic.TopicName"
+                            (blur)="saveTopic(pinnedTopic.TopicId, pinnedTopic.TopicName)"
+                            (keyup.enter)="saveTopic(pinnedTopic.TopicId, pinnedTopic.TopicName)"
+                            style="max-width: 350px; font-weight: 500; font-size: larger; border: none; padding: 5px; outline: none;" />
+
+                        <!-- Show topic name when not editing -->
+                        <div class="topic_name cursor-pointer"
+                            *ngIf="!isEditing || editedTopicId !== pinnedTopic.TopicId"
+                            (click)="calltoggle(pinnedTopic.TopicName, pinnedTopic.TopicId);assigningTopic(pinnedTopic.TopicId)"
+                            style="max-width: 350px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; font-weight: 500; font-size: 15px;line-height: 1.5rem;">
+                            {{ pinnedTopic.TopicName }}
+                        </div>
+
+                        <!-- Existing overlay panel and actions -->
+                        <div class="align-content-center actionsfortopic">
+                            <div [ngClass]="op"
+                                class="pi pi-ellipsis-v text-black bg-transparent border-none ml-1 cursor-pointer"
+                                (click)="showOverlayPanel($event, overlayPanel, pinnedTopic)">
+                            </div>
+                            <p-overlayPanel #op #overlayPanel [style]="{ width: '180px' }">
+                                <div *ngIf="selectedTopic" class="topics_modal_outerDiv">
+                                    <ul>
+                                        <li>
+                                            <a (click)="unpinTopic(pinnedTopic)">
+                                                <i class="fa-solid fa-thumbtack"></i>
+                                                <span>Unpin</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                (click)="enableEditing(pinnedTopic.TopicId);assigningTopic(pinnedTopic.TopicId);showOverlayPanel($event, overlayPanel, pinnedTopic);">
+                                                <i class="pi pi-pencil" style="font-size: 1rem"></i>
+                                                <span>Rename</span>
+                                            </a>
+                                        </li>
+
+                                        <div class="dropdown dropend">
+                                            <!-- Export Button -->
+                                            <button type="button"
+                                                (click)="exportToPdf(pinnedTopic.TopicName, pinnedTopic.TopicId, $event)"
+                                                class="btn  export-button">
+                                                <i class="fa-solid fa-download" style="font-size: 1rem"></i> Download as
+                                                PDF
+                                            </button>
+
+                                            <!-- Dropdown Menu -->
+                                            <ul class="dropdown-menu"
+                                                style="list-style: none;  padding: 0; cursor: pointer;">
+
+                                            </ul>
+                                        </div>
+                                        <li (click)="SharedDialog()">
+                                            <a>
+                                                <i class="fa fa-share-alt" style="font-size: 1rem"></i>
+                                                <span>Share</span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a
+                                                (click)="archiveTopicSidebar(pinnedTopic.TopicName, pinnedTopic.TopicId);showOverlayPanel($event, overlayPanel, topicsdata);">
+
+                                                <i class="pi pi-inbox" style="font-size: 1rem"></i>
+
+                                                <span>
+
+                                                    Archive
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                (click)="deleteTopicSidebar(pinnedTopic.TopicName, pinnedTopic.TopicId);showOverlayPanel($event, overlayPanel, pinnedTopic);">
+
+                                                <i class="pi pi-trash" style="font-size: 1rem"></i>
+                                                <span>
+
+                                                    Delete
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <!-- <div class="flex justify-content-end gap-2">
+                        <p-button label="Cancel" severity="secondary" (onClick)="overlayPanel.hide()" />
+                        <p-button label="Save" (onClick)="saveTopicData(); overlayPanel.hide()" />
+                    </div> -->
+
+                                </div>
+                            </p-overlayPanel>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <div class="chat-container" (click)="toggleCollapse()">
+        <h6 *ngIf="topicsdata?.length > 0">
+            <i [class]="isCollapsed ? 'fa fa-caret-right' : 'fa fa-caret-down'"></i>
+            Recent Chat
+        </h6>
+    </div>
+    <app-document-generator #documentGenerator [topicId]="selectedTopicId" [userId]="userId" [topicName]="topicName">
+    </app-document-generator>
+
+
+    <!-- <p-table [value]="topicsdata" #dt filterBy="TopicName" [rowHover]="true"> -->
+
+    <p-table [value]="topicsdata?.slice(0,4)" #dt filterBy="TopicName" [rowHover]="true"
+        [ngStyle]="{ 'margin-top': '100px' }" id="demo" [class.collapse]="isCollapsed">
+        <ng-template pTemplate="body" let-topicsdata>
+            <tr class="bg-transparent p-0">
+                <td class="border-none py-1" style="padding: 0;">
+                    <div class="topic" [ngClass]="{ 'active': topicsdata.TopicId === topicIdnew}"
+                        pTooltip="{{ topicsdata.TopicName }}">
+                        <input *ngIf="isEditing && editedTopicId === topicsdata.TopicId"
+                            [(ngModel)]="topicsdata.TopicName"
+                            (blur)="saveTopic(topicsdata.TopicId,topicsdata.TopicName)"
+                            style="max-width: 350px; font-weight: 500; font-size: larger; opacity: 0.1;"
+                            (keyup.enter)="saveTopic(topicsdata.TopicId,topicsdata.TopicName)"
+                            style="max-width: 350px; font-weight: 500; font-size: larger; border: none; padding: 5px; outline: none; " />
+
+                        <!-- <i class="fa-regular fa-message" style="font-size: 1rem; margin-right: 8px; margin-top: 2px;"
+                            *ngIf="!isEditing || editedTopicId !== topicsdata.TopicId"></i> -->
+                        <img src="../../assets/layout/images/message_icon.png" alt="">
+
+                        <div class="topic_name cursor-pointer"
+                            *ngIf="!isEditing || editedTopicId !== topicsdata.TopicId"
+                            (click)="calltoggle(topicsdata.TopicName,topicsdata.TopicId);assigningTopic(topicsdata.TopicId)"
+                            style="max-width: 350px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; font-weight: 500; font-size: 15px;line-height: 1.5rem;">
+                            {{ topicsdata.TopicName }}
+                        </div>
+                        <div class="align-content-center actionsfortopic">
+                            <!-- <div [ngClass]="op"
+                                    class="pi pi-ellipsis-v text-white bg-transparent border-none ml-1 cursor-pointer"
+                                    (click)="enableEditing(topicsdata.TopicId);assigningTopic(topicsdata.TopicId)">
+                                </div> -->
+
+                            <div [ngClass]="op"
+                                class="pi pi-ellipsis-v text-black bg-transparent border-none ml-1 cursor-pointer"
+                                (click)="showOverlayPanel($event, overlayPanel, topicsdata)">
+                            </div>
+                            <p-overlayPanel #op #overlayPanel [style]="{ width: '180px' }">
+                                <div *ngIf="selectedTopic" class="topics_modal_outerDiv">
+                                    <ul>
+                                        <li>
+                                            <a (click)="pinTopic(topicsdata)">
+
+                                                <i class="fa-solid fa-thumbtack"></i>
+
+                                                <span>
+                                                    Pin
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                (click)="enableEditing(topicsdata.TopicId);assigningTopic(topicsdata.TopicId);showOverlayPanel($event, overlayPanel, topicsdata);">
+
+                                                <i class="pi pi-pencil" style="font-size: 1rem"></i>
+
+                                                <span>
+                                                    Rename
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <!-- <li (click)="showDialogedit();filterById(topicsdata.TopicId)">
+                                            <a
+                                                (click)="editTopicSidebar(topicsdata.TopicName,topicsdata.TopicId);showOverlayPanel($event, overlayPanel, topicsdata);">
+
+                                                <i class="pi pi-pencil" style="font-size: 1rem"></i>
+
+                                                <span>
+                                                    Rename
+                                                </span>
+                                            </a>
+                                        </li> -->
+                                        <div class="dropdown dropend">
+                                            <!-- Export Button -->
+                                            <button type="button"
+                                                (click)="exportToPdf(topicsdata.TopicName, topicsdata.TopicId, $event)"
+                                                class="btn  export-button">
+                                                <i class="fa-solid fa-download" style="font-size: 1rem"></i> Download as
+                                                PDF
+                                            </button>
+
+                                            <!-- Dropdown Menu -->
+                                            <ul class="dropdown-menu"
+                                                style="list-style: none;  padding: 0; cursor: pointer;">
+
+                                            </ul>
+                                        </div>
+
+                                        <li (click)="SharedDialog1(topicsdata.TopicId)">
+                                            <a>
+                                                <i class="fa fa-share-alt" style="font-size: 1rem"></i>
+                                                <span>Share</span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a
+                                                (click)="archiveTopicSidebar(topicsdata.TopicName,topicsdata.TopicId);showOverlayPanel($event, overlayPanel, topicsdata);">
+
+                                                <i class="pi pi-inbox" style="font-size: 1rem"></i>
+
+                                                <span>
+
+                                                    Archive
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                (click)="deleteTopicSidebar(topicsdata.TopicName,topicsdata.TopicId);showOverlayPanel($event, overlayPanel, topicsdata);">
+
+                                                <i class="pi pi-trash" style="font-size: 1rem"></i>
+                                                <span>
+
+                                                    Delete
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </p-overlayPanel>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-dialog [value]="topicsdata.slice(0,4)" *ngFor="let tpc of topicArrayForEdit" [(visible)]="editpopupview"
+        [style]="{width: '60vw',position:'absolute',top:'100px',height:'75vh'}" [draggable]="false" [resizable]="true"
+        [modal]="true" [maximizable]="true">
+
+        <ng-template pTemplate="header">
+            <div class="custom-header">
+                <span>Edit - {{tpc.TopicName}}</span>
+
+            </div>
+        </ng-template>
+
+
+        <div class="outerDiv_editFilter">
+            <div class="outerDiv_editFilterNew">
+                <p-tabView [(activeIndex)]="activeTabIndex">
+                    <p-tabPanel header="Language">
+                        <div id="languageFilterDiv">
+                            <div class="availableLang">
+                                Available Languages
+                            </div>
+                            <div class="languageFilterDiv">
+                                <div class="card flex justify-content-center">
+                                    <div class="flex flex-wrap gap-3 flex-column">
+                                        <!-- Loop through this.languages to display each language dynamically -->
+                                        <div class="flex align-items-center" *ngFor="let language of languages">
+                                            <p-radioButton name="language" [value]="language.LanguageName"
+                                                [(ngModel)]="selectedLanguage"
+                                                [inputId]="'language' + language.LanguageID" />
+                                            <label [for]="'language' + language.LanguageID" class="ml-2">
+                                                {{ language.LanguageName }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="arrowDivOuter">
+                            <div class="arrowDivOuter">
+                                <button class="navigate-button" (click)="navigateToUpdateUserTab()">Go to Update
+                                    User</button>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+
+                    <p-tabPanel header="Update User">
+                        <div class="search-container">
+                            <form (ngSubmit)="searchUsers()">
+                                <input type="text" placeholder="Search.." name="search" class="searchaddusers"
+                                    autocomplete="off" pInputText [(ngModel)]="searchInputnew">
+                                <button type="submit" class="searchbuttonaddusers"><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
+
+                        <!-- First table for displaying search results -->
+                        <table *ngIf="searchResults.length > 0" class="table table-hover p-3 mt-2">
+                            <!-- Table header -->
+                            <thead>
+                                <tr class="headeraddusers">
+                                    <th>Action</th>
+                                    <th>User E-mail</th>
+                                    <th>Role</th>
+                                </tr>
+                            </thead>
+                            <!-- Table body -->
+                            <tbody>
+                                <!-- Iterate over search results -->
+                                <tr *ngFor="let user of searchResults">
+                                    <td>
+                                        <i class="fa fa-plus-circle" (click)="toggleUserSelection(user)"
+                                            aria-hidden="true" style="cursor: pointer;">
+                                        </i>
+                                        <!-- <td class="table-cell-padding" id="icons-div"> -->
+                                        <!-- <i class="pi pi-pencil icon-margin" style="font-size: 1rem;"></i>
+                                        <i class="pi pi-trash" style="font-size: 1rem;"></i> -->
+                                        <!-- </td> -->
+                                    </td>
+                                    <td>{{ user.EmailAddress }}</td>
+                                    <td>
+                                        <select class="form-select" id="sel1" name="sellist1"
+                                            (change)="handleRoleChange(user.UserId, $event.target)">
+                                            <option value="" disabled selected>Select an option</option>
+                                            <option *ngFor="let role of userRoles" [value]="role.UserRoleId">{{
+                                                role.RoleName }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Second table for displaying selected users -->
+                        <table *ngIf="selectedUsers.length > 0" class="table table-hover p-3 mt-2">
+                            <!-- Table header -->
+                            <thead>
+                                <tr class="headeraddusers">
+                                    <th>Action</th>
+                                    <th>User E-mail</th>
+                                    <th>Role</th>
+                                </tr>
+                            </thead>
+                            <!-- Table body -->
+                            <tbody>
+                                <!-- Iterate over selected users -->
+                                <tr *ngFor="let user of selectedUsers">
+
+                                    <!-- <td class="table-cell-padding" id="icons-div">
+                                        <i class="pi pi-pencil icon-margin" style="font-size: 1rem;"></i>
+                                        <i class="pi pi-trash" style="font-size: 1rem;"></i>
+                                    </td> -->
+                                    <td>
+                                        <i class="fa fa-minus-circle" (click)="removeUser(user)" aria-hidden="true"
+                                            [ngClass]="{'disabled-icon': (user.EmailAddress === AliasName)}">
+                                        </i>
+
+                                    </td>
+                                    <td>{{ user.EmailAddress }}</td>
+                                    <td>
+                                        <select class="form-select" id="sel1" name="sellist1"
+                                            [disabled]="isSelectedDropdownDisabled">
+                                            <option *ngFor="let role of userRoles" [value]="role.UserRoleId"
+                                                [selected]="dialogHeader === 'Update Topic' ? role.UserRoleId === user.UserRoleId : role.UserRoleId === user.UserRoleId">
+                                                {{ role.RoleName }}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p-paginator class="" style="float: right;" [rows]="3" [totalRecords]="100"
+                            [rowsPerPageOptions]="[10, 20, 25, 30]"></p-paginator>
+
+
+
+                        <div class="block text-right" style="margin-top: 80px;">
+                            <div class="AddtopicErrorMsg-text" *ngIf="invalidFromField">Please Fill Required fields
+                            </div>
+                            <button class="submitbtn" type="button" (click)="updateChat(tpc.TopicId)">
+                                {{ isEditMode ? 'Update' : 'Update Chat' }}
+                            </button>
+                            <button class="canclebtn" (click)="closeaddtopic()">Cancel</button>
+                        </div>
+
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+
+        </div>
+
+    </p-dialog>
+
+    <!-- Pinned Topics  -->
+    <p-dialog [value]="pinnedTopics" *ngFor="let pinnedTopic of topicArrayForPinnedEdit"
+        [(visible)]="editPinnedPopupView" [style]="{width: '60vw', position:'absolute', top:'100px', height:'75vh'}"
+        [draggable]="false" [resizable]="true" [modal]="true" [maximizable]="true">
+
+        <ng-template pTemplate="header">
+            <div class="custom-header">
+                <span>Edit Pinned Topic - {{pinnedTopic.TopicName}}</span>
+            </div>
+        </ng-template>
+
+        <div class="outerDiv_editFilter">
+            <div class="outerDiv_editFilterNew">
+                <p-tabView [(activeIndex)]="activeTabIndex">
+                    <p-tabPanel header="Language">
+                        <div id="languageFilterDiv">
+                            <div class="availableLang">
+                                Available Languages
+                            </div>
+                            <div class="languageFilterDiv">
+                                <div class="card flex justify-content-center">
+                                    <div class="flex flex-wrap gap-3 flex-column">
+                                        <!-- Loop through this.languages to display each language dynamically -->
+                                        <div class="flex align-items-center" *ngFor="let language of languages">
+                                            <p-radioButton name="language" [value]="language.LanguageName"
+                                                [(ngModel)]="selectedLanguage"
+                                                [inputId]="'language' + language.LanguageID" />
+                                            <label [for]="'language' + language.LanguageID" class="ml-2">
+                                                {{ language.LanguageName }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="arrowDivOuter">
+                            <div class="arrowDivOuter">
+                                <button class="navigate-button" (click)="navigateToUpdateUserTab()">Go to Update
+                                    User</button>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+
+                    <p-tabPanel header="Update User">
+                        <div class="search-container">
+                            <form (ngSubmit)="searchUsers()">
+                                <input type="text" placeholder="Search.." name="search" class="searchaddusers"
+                                    autocomplete="off" pInputText [(ngModel)]="searchInputnew">
+                                <button type="submit" class="searchbuttonaddusers"><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
+
+                        <!-- First table for displaying search results -->
+                        <table *ngIf="searchResults.length > 0" class="table table-hover p-3 mt-2">
+                            <!-- Table header -->
+                            <thead>
+                                <tr class="headeraddusers">
+                                    <th>Action</th>
+                                    <th>User E-mail</th>
+                                    <th>Role</th>
+                                </tr>
+                            </thead>
+                            <!-- Table body -->
+                            <tbody>
+                                <!-- Iterate over search results -->
+                                <tr *ngFor="let user of searchResults">
+                                    <td>
+                                        <i class="fa fa-plus-circle" (click)="toggleUserSelection(user)"
+                                            aria-hidden="true" style="cursor: pointer;">
+                                        </i>
+                                        <!-- <td class="table-cell-padding" id="icons-div"> -->
+                                        <!-- <i class="pi pi-pencil icon-margin" style="font-size: 1rem;"></i>
+                                    <i class="pi pi-trash" style="font-size: 1rem;"></i> -->
+                                        <!-- </td> -->
+                                    </td>
+                                    <td>{{ user.EmailAddress }}</td>
+                                    <td>
+                                        <select class="form-select" id="sel1" name="sellist1"
+                                            (change)="handleRoleChange(user.UserId, $event.target)">
+                                            <option value="" disabled selected>Select an option</option>
+                                            <option *ngFor="let role of userRoles" [value]="role.UserRoleId">{{
+                                                role.RoleName }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Second table for displaying selected users -->
+                        <table *ngIf="selectedUsers.length > 0" class="table table-hover p-3 mt-2">
+                            <!-- Table header -->
+                            <thead>
+                                <tr class="headeraddusers">
+                                    <th>Action</th>
+                                    <th>User E-mail</th>
+                                    <th>Role</th>
+                                </tr>
+                            </thead>
+                            <!-- Table body -->
+                            <tbody>
+                                <!-- Iterate over selected users -->
+                                <tr *ngFor="let user of selectedUsers">
+
+                                    <td>
+                                        <i class="fa fa-minus-circle" (click)="removeUser(user)" aria-hidden="true"
+                                            [ngClass]="{'disabled-icon': (user.EmailAddress === AliasName)}">
+                                        </i>
+
+                                    </td>
+                                    <td>{{ user.EmailAddress }}</td>
+                                    <td>
+                                        <select class="form-select" id="sel1" name="sellist1"
+                                            [disabled]="isSelectedDropdownDisabled">
+                                            <option *ngFor="let role of userRoles" [value]="role.UserRoleId"
+                                                [selected]="dialogHeader === 'Update Topic' ? role.UserRoleId === user.UserRoleId : role.UserRoleId === user.UserRoleId">
+                                                {{ role.RoleName }}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p-paginator class="" style="float: right;" [rows]="3" [totalRecords]="100"
+                            [rowsPerPageOptions]="[10, 20, 25, 30]"></p-paginator>
+
+
+
+                        <div class="block text-right" style="margin-top: 80px;">
+                            <div class="AddtopicErrorMsg-text" *ngIf="invalidFromField">Please Fill Required fields
+                            </div>
+                            <button class="submitbtn" type="button" (click)="updateChat(pinnedTopic.TopicId)">
+                                {{ isEditMode ? 'Update' : 'Update Chat' }}
+                            </button>
+                            <button class="canclebtn" (click)="closeaddtopic()">Cancel</button>
+                        </div>
+
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+
+        </div>
+    </p-dialog>
+
+    <div *ngIf="topicsdata?.length > 0 && !isCollapsed" class="view-more-toggle">
+        <button (click)="toggleView()">
+            <span *ngIf="showAllTopics; else showLessIcon">
+                <!-- <div class="line"></div>
+                <p class="viewP" [ngClass]="{ 'dark-theme': isToggled, 'light-theme': !isToggled }">
+                    View less
+                </p>
+                <i class="fa-solid fa-angle-up" [ngClass]="{ 'dark-theme': isToggled, 'light-theme': !isToggled }"></i> -->
+                <!-- <div class="line"></div> -->
+            </span>
+            <ng-template #showLessIcon>
+                <span>
+                    <div class="line"></div>
+                    <p class="viewP" [ngClass]="{ 'dark-theme': isToggled, 'light-theme': !isToggled }">
+                        View more
+                    </p>
+                    <i class="fa-solid fa-angle-down"
+                        [ngClass]="{ 'dark-theme': isToggled, 'light-theme': !isToggled }"></i>
+                    <div class="line"></div>
+                </span>
+            </ng-template>
+        </button>
+    </div>
+
+
+    <div *ngIf="showAllTopics " class="scroll" [ngClass]="['highlight', 'scroll']">
+
+
+        <!-- showAllTopics ? topicsdata.length : -->
+
+        <p-table [value]="topicsdata?.slice(3,topicsdata.length-1)" #dt filterBy="TopicName" [rowHover]="true">
+            <ng-template pTemplate="body" let-topicsdata>
+                <tr class="bg-transparent p-0">
+                    <td class="border-none py-1" style="padding: 0;">
+                        <div class="topic topic_view_more" [ngClass]="{
+                            'active': topicsdata.TopicId === topicIdnew, 
+                            'dark-theme': isToggled,
+                            'dark-mode-hover':isToggled,
+                            
+                          }" pTooltip="{{ topicsdata.TopicName }}">
+                            <input *ngIf="isEditing && editedTopicId === topicsdata.TopicId"
+                                [(ngModel)]="topicsdata.TopicName"
+                                (blur)="saveTopic(topicsdata.TopicId,topicsdata.TopicName)"
+                                style="max-width: 350px; font-weight: 500; font-size: larger; opacity: 0.1;"
+                                (keyup.enter)="saveTopic(topicsdata.TopicId,topicsdata.TopicName)"
+                                style="max-width: 350px; font-weight: 500; font-size: larger; border: none; padding: 5px; outline: none; " />
+
+                            <!-- <i class="fa-regular fa-message"
+                                style="font-size: 1rem; margin-right: 8px; margin-top: 2px;"
+                                *ngIf="!isEditing || editedTopicId !== topicsdata.TopicId"></i> -->
+                            <img src="../../assets/layout/images/message_icon.png" alt="Topic-icon">
+                            <div class="topic_name cursor-pointer"
+                                *ngIf="!isEditing || editedTopicId !== topicsdata.TopicId"
+                                (click)="calltoggle(topicsdata.TopicName,topicsdata.TopicId);assigningTopic(topicsdata.TopicId)"
+                                style="max-width: 350px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; font-weight: 500; font-size: 15px;line-height: 1.5rem;">
+                                {{ topicsdata.TopicName }}
+                            </div>
+                            <div class="align-content-center actionsfortopic">
+                                <!-- <div [ngClass]="op"
+                                    class="pi pi-ellipsis-v text-white bg-transparent border-none ml-1 cursor-pointer"
+                                    (click)="enableEditing(topicsdata.TopicId);assigningTopic(topicsdata.TopicId)">
+                                </div> -->
+
+                                <div [ngClass]="op"
+                                    class="pi pi-ellipsis-v text-black bg-transparent border-none ml-1 cursor-pointer"
+                                    (click)="showOverlayPanel($event, overlayPanel, topicsdata)">
+                                </div>
+                                <p-overlayPanel #op #overlayPanel [style]="{ width: '180px' }">
+                                    <div *ngIf="selectedTopic" class="topics_modal_outerDiv">
+                                        <ul>
+                                            <li>
+                                                <a (click)="pinTopic(topicsdata)">
+
+                                                    <i class="fa-solid fa-thumbtack"></i>
+
+                                                    <span>
+                                                        Pin
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a
+                                                    (click)="enableEditing(topicsdata.TopicId);assigningTopic(topicsdata.TopicId);showOverlayPanel($event, overlayPanel, topicsdata);">
+
+                                                    <i class="pi pi-pencil" style="font-size: 1rem"></i>
+
+                                                    <span>
+                                                        Rename
+                                                    </span>
+                                                </a>
+                                            </li>
+
+
+                                            <div class="dropdown dropend">
+                                                <!-- Export Button -->
+                                                <button type="button"
+                                                    (click)="exportToPdf(topicsdata.TopicName, topicsdata.TopicId, $event)"
+                                                    class="btn  export-button">
+                                                    <i class="fa-solid fa-download" style="font-size: 1rem"></i>
+                                                    Download as PDF
+                                                </button>
+
+                                                <!-- Dropdown Menu -->
+                                                <ul class="dropdown-menu"
+                                                    style="list-style: none;  padding: 0; cursor: pointer;">
+
+                                                </ul>
+                                            </div>
+
+                                            <li (click)="SharedDialog1(topicsdata.TopicId)">
+                                                <a>
+                                                    <i class="fa fa-share-alt" style="font-size: 1rem"></i>
+                                                    <span>Share</span>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a
+                                                    (click)="archiveTopicSidebar(topicsdata.TopicName,topicsdata.TopicId);showOverlayPanel($event, overlayPanel, topicsdata);">
+
+                                                    <i class="pi pi-inbox" style="font-size: 1rem"></i>
+
+                                                    <span>
+
+                                                        Archive
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a
+                                                    (click)="deleteTopicSidebar(topicsdata.TopicName,topicsdata.TopicId);showOverlayPanel($event, overlayPanel, topicsdata);">
+
+                                                    <i class="pi pi-trash" style="font-size: 1rem"></i>
+                                                    <span>
+
+                                                        Delete
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                </p-overlayPanel>
+
+                            </div>
+
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </ng-template>
+
+        </p-table>
+
+    </div>
+    <div *ngIf="showAllTopics" class="view-more-toggle">
+        <button (click)="toggleView()">
+            <span *ngIf="showAllTopics; else showLessIcon">
+                <div class="line"></div>
+                <p class="viewP" [ngClass]="{ 'dark-theme': isToggled, 'light-theme': !isToggled }">
+                    View less
+                </p>
+                <i class="fa-solid fa-angle-up" [ngClass]="{ 'dark-theme': isToggled, 'light-theme': !isToggled }"></i>
+                <div class="line"></div>
+            </span>
+            <ng-template #showLessIcon>
+            </ng-template>
+        </button>
+    </div>
+
+
+    <div class="icon-container_open">
+        <!-- <button class="icon-button_open">
+            <i class="pi pi-shield"></i>
+            <div>
+                <p> Manager </p>
+            </div>
+        </button> -->
+        <button (click)="showOverlay($event)" class="icon-button_open" pTooltip="Help" tooltipPosition="right">
+            <!-- <i class="pi-question-circle" aria-hidden="true"></i> -->
+            <i class="pi pi-question-circle"></i>
+            <div>
+                <p> Help </p>
+
+            </div>
+        </button>
+        <button class="icon-button_open" pTooltip="Activity" tooltipPosition="right" (click)="openActivity()">
+            <i class="pi pi-clock"></i>
+            <div>
+                <p> Activity </p>
+            </div>
+
+        </button>
+
+        <button (click)="op.toggle($event)" class="icon-button_open" pTooltip="Settings" tooltipPosition="right"
+            style="position: relative;">
+            <i class="pi pi-cog"></i>
+            <div>
+                <p>Settings</p>
+            </div>
+
+        </button>
+        <p-overlayPanel #op>
+            <div [ngClass]="{'settings_overlay_close': !sidebarVisible}"
+                class="flex flex-column gap-3 settings_overlay">
+                <div>
+                    <ul class="settingsModalUl">
+                        <li>
+                            <div class="darkThemeDiv">
+                                <i class="pi pi-moon" style="font-size: 1rem"></i>
+                                <p>
+                                    Dark theme
+                                </p>
+                            </div>
+                            <div>
+                                <label class="switch">
+                                    <input type="checkbox" [(ngModel)]="isToggled" (change)="toggleChanged()">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </p-overlayPanel>
+    </div>
+</p-sidebar>
+
+
+<!-- Icon to Toggle the Sidebar -->
+<div [pTooltip]="sidebarVisible ? '' : 'Expand menu'" tooltipPosition="bottom"
+    [class]="sidebarVisible ? 'sidebar_custom_icon' : 'sidebar_custom_icon2'">
+    <span *ngIf="!sidebarVisible" (click)="toggleSidebar()">
+
+        <!-- <i class="pi pi-bars" style="font-size: 1.5rem;" aria-hidden="true"></i> -->
+        <img src="../../assets/layout/images/exxon_mobil/exxon_short_logo.png" alt="">
+    </span>
+    <div *ngIf="sidebarVisible" class="logoNewDiv">
+        <img src="../../assets/layout/images/exxon_mobil/logo.png" alt="Exxon">
+        <!-- <p>
+            Knowledge Management System
+        </p> -->
+
+    </div>
+    <!-- <i *ngIf="sidebarVisible" class="pi pi-bars" style="font-size: 1.5rem;" aria-hidden="true"></i> -->
+    <img pTooltip="Collapse menu" tooltipPosition="right" (click)="toggleSidebar()" *ngIf="sidebarVisible"
+        src="../../assets/layout/images/exxon_mobil/Card.png" alt="" class="Collapsemenu-icon">
+</div>
+
+<!-- <div [pTooltip]="sidebarVisible ? 'Collapse menu' : 'Expand menu'" tooltipPosition="bottom" class="sidebar_custom_icon"
+    (click)="toggleSidebar()">
+    
+       
+</div> -->
+
+
+<div class="chat-container_closed" pTooltip="New Chat" tooltipPosition="bottom">
+    <button class="new-chat-button_closed" [disabled]="!new_chat" [ngClass]="{'disabled-button': !new_chat}"
+        (click)="callnewchat()">
+        <i class="fa fa-plus" style="font-size: 1.5rem;" aria-hidden="true"></i>
+        <!-- <div>
+            <p> New Chat </p>
+        </div> -->
+    </button>
+</div>
+
+<div class="icon-container_closed">
+    <!-- <button class="icon-button_closed"> -->
+    <!-- <i class="pi-shield" aria-hidden="true"></i> -->
+    <!-- <i class="pi pi-shield"></i> -->
+    <!-- <div>
+            <p> New Chat </p>
+        </div> -->
+    <!-- </button> -->
+    <button (click)="showOverlay($event)" class="icon-button_closed" pTooltip="Help" tooltipPosition="right">
+        <!-- <i class="pi-question-circle" aria-hidden="true"></i> -->
+        <i class="pi pi-question-circle"></i>
+        <!-- <div>
+            <p> New Chat </p>
+        </div> -->
+    </button>
+    <button class="icon-button_closed" pTooltip="Activity" tooltipPosition="right" (click)="openActivity()">
+
+        <i class="pi pi-clock"></i>
+    </button>
+    <button (click)="op.toggle($event)" class="icon-button_closed" pTooltip="Settings" tooltipPosition="right">
+        <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
+        <i class="pi pi-cog"></i>
+        <!-- <div>
+            <p> New Chat </p>
+        </div> -->
+    </button>
+</div>
+
+
+
+<!-- Settings page popup -->
+<p-dialog header="Reporting" [(visible)]="settingspagevisible" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="true" [modal]="true" [maximizable]="true">
+    <!-- <div class="Accestext ">Acces</div> -->
+
+    <div class="Accesslist" style="width: 70%; margin-right: auto; margin-left: auto;">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-5">
+                <p class="accesslistsettings-text">Role Definition </p>
+            </div>
+            <div class="col-md-5">
+                <button class="managesettings-btn" (click)="ManageSettings()">View</button>
+            </div>
+            <p class="line-button mt-3" style="border: 1px solid rgb(204, 204, 204);"></p>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-2"></div>
+            <div class="col-md-5">
+                <p class="accesslistsettings-text">Topic List </p>
+            </div>
+            <div class="col-md-5">
+                <button class="managesettings-btn" (click)="TopiclistSettings()">View</button>
+            </div>
+            <p class="line-button mt-3" style="border: 1px solid rgb(204, 204, 204);"></p>
+        </div>
+
+    </div>
+
+    <div class="text-right mt-4">
+        <button class="Cancelsettings-btn" (click)="Mainsettingsclose()">Cancel</button>
+    </div>
+
+</p-dialog>
+
+<p-dialog header="Role Definition" [(visible)]="ManageSettingsvisible" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="true" [modal]="true" [maximizable]="true">
+    <table class="table">
+        <thead class="headeraddusers">
+            <tr>
+                <th>Role Name</th>
+                <th>Add</th>
+                <th>Edit</th>
+                <!-- <th>Delete</th> -->
+                <th>Schedule</th>
+                <!-- <th>ShoworHide</th> -->
+                <th>View</th>
+                <th>Ask</th>
+                <th>Copy</th>
+                <th>Export</th>
+                <!-- <th>Import</th> -->
+                <th>Regenerate</th>
+                <th>Archive</th>
+                <!-- Add other headers as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let access of accessList">
+                <td>{{ access.RoleName }}</td>
+                <td>{{ access.Add }}</td>
+                <td>{{ access.Edit }}</td>
+                <!-- <td>{{ access.Delete }}</td> -->
+                <td>{{access.Schedule}}</td>
+                <!-- <td>{{access.ShoworHide}}</td> -->
+                <td>{{access.View}}</td>
+                <td>{{access.Ask}}</td>
+                <td>{{access.Copy}}</td>
+                <td>{{access.Export}}</td>
+                <!-- <td>{{access.Import}}</td> -->
+                <td>{{access.Regenerate}}</td>
+                <td>{{access.Archive}}</td>
+                <!-- Add other table cells as needed -->
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-right mt-4">
+        <button class="Cancelsettings-btn" (click)="closeAccesslist1()">Cancel</button>
+    </div>
+</p-dialog>
+
+
+<p-dialog header="Topic List" [(visible)]="TopiclistSettingsvisible" [style]="{width: '80vw'}" [draggable]="false"
+    [resizable]="true" [modal]="true" [maximizable]="true">
+    <input type="search" class="form-control" placeholder="Search Topics" name="Search" autocomplete="off" pInputText
+        [(ngModel)]="searchTextTopicList" (input)="filterTopics()" style="width: 20%;"
+        (keyup)="searchTopicListSettings($event)">
+
+
+    <table class="table mt-3">
+        <thead class="headeraddusers">
+            <tr>
+                <th>Topic ID</th>
+                <th>Archive Type</th>
+                <th>Topic Name</th>
+                <th>Claim Type</th>
+                <th>Created By</th>
+                <th>Rating</th>
+                <th>Created On</th>
+                <th>Topic Type</th>
+                <!-- <th>Total Count</th> -->
+                <!-- <th>Is Featured</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let topic of topicListForsettings">
+                <td>{{ topic.topicId }}</td>
+                <td>{{ topic.archiveType }}</td>
+                <td>{{ topic.topicName }}</td>
+                <td>{{ topic.claimType }}</td>
+                <td>{{ topic.createdBy }}</td>
+                <td [innerHTML]="getStarIcons(topic.rating)"></td>
+                <td>{{ topic.createdOn }}</td>
+                <td>{{ topic.topicType }}</td>
+                <!-- <td>{{ topic.totalCount }}</td>
+                <td>{{ topic.isFeatured }}</td> -->
+            </tr>
+        </tbody>
+    </table>
+    <p-paginator (onPageChange)="onPageChangeSettings($event)" [rows]="settingsRows" [totalRecords]="totalRecords"
+        [totalRecords]="filteredTopicList.length" [rowsPerPageOptions]="[10, 20,25, 30]"></p-paginator>
+
+    <div class="text-right mt-4">
+        <button class="Cancelsettings-btn" (click)="TopicListCancel()">Cancel</button>
+    </div>
+</p-dialog>
+
+
+
+
+<p-overlayPanel #op1 class="p-0">
+    <div class="filtesoption">
+        <span class="block">
+            <input type="radio" name="topicFilter" value="1" (change)="filterShardeOPtions($event)">
+        </span>
+        <span class="block inputheading">All Topics</span>
+    </div>
+    <div class="filtesoption">
+        <span class="block">
+            <input type="radio" name="topicFilter" value="2" (change)="filterShardeOPtions($event)">
+        </span>
+        <span class="block inputheading">My Topics - All</span>
+    </div>
+    <div class="filtesoption">
+        <span class="block">
+            <input type="radio" name="topicFilter" value="3" (change)="filterShardeOPtions($event)">
+        </span>
+        <span class="block inputheading"> My Topics - Shared</span>
+    </div>
+    <div class="filtesoption">
+        <span class="block">
+            <input type="radio" name="topicFilter" value="4" (change)="filterShardeOPtions($event)">
+        </span>
+        <span class="block inputheading"> Topic - Private</span>
+    </div>
+    <div class="filtesoption">
+        <span class="block">
+            <input type="radio" name="topicFilter" value="5" (change)="filterShardeOPtions($event)">
+        </span>
+        <span class="block inputheading"> Other's Topics</span>
+    </div>
+    <div class="filtesoption">
+        <span class="block">
+            <input type="radio" name="topicFilter" value="6" (change)="filterShardeOPtions($event)" checked>
+        </span>
+        <span class="block inputheading"> Featured Topics</span>
+    </div>
+    <!-- Add similar markup for other radio options -->
+</p-overlayPanel>
+
+
+
+<p-dialog class="AddTopicFormResp" [header]="dialogHeader" [(visible)]="createtopicvisible"
+    [style]="{width: '60vw',height: '30vw'}" [draggable]="false" [resizable]="true" [modal]="true" [maximizable]="true"
+    (onHide)="onHideDialog()">
+    <form [formGroup]="addtopicform" (ngSubmit)="submitForm()">
+        <p-tabView [(activeIndex)]="activeTabIndex">
+            <p-tabPanel>
+                <div class="formwrap">
+                    <div class="inputwrap">
+                        <label> Chat Name <span class="text-red-500 ">*</span> : </label>
+                        <input type="text" pInputText formControlName="TopicName" class="w-15rem">
+                        <div class="text-red-500 ThreeCharacter-text"
+                            *ngIf="addtopicform.controls['TopicName'].hasError('minlength')">
+                            Please fill at least 3 characters.
+                        </div>
+                        <div class="" *ngIf="TopicnameExits">
+                            Topic Name is Already exits ...
+                        </div>
+                    </div>
+
+
+
+                    <div class="inputwrap">
+                        <label> Language <span class="text-red-500">*</span> : </label>
+                        <p-dropdown [options]="languages" class="customdesign w-15rem" optionLabel="name"
+                            [filter]="true" [showClear]="true" placeholder="Select" [style]="{width:'70%'}"
+                            formControlName="languagedropdown">
+                            <ng-template pTemplate="filter">
+                                <div class="flex gap-1">
+                                    <div class="p-inputgroup" (click)="$event.stopPropagation()">
+                                        <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+                                        <input type="text" pInputText placeholder="Filter" />
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                </div>
+
+
+                <div class="block text-right" style="margin-top: 80px;">
+                    <div class="AddtopicErrorMsg-text" *ngIf="invalidFromField">Please Fill Required fields</div>
+                    <button class="submitbtn" type="submit">{{ isEditMode ? 'Update' : 'Submit' }}</button>
+                    <button class="canclebtn" (click)="closeaddtopic()">Cancel</button>
+                </div>
+
+            </p-tabPanel>
+
+        </p-tabView>
+
+
+        <div *ngIf="showSuccessMessage" class="success-message">
+            Topic added successfully!
+        </div>
+    </form>
+</p-dialog>
+
+
+
+
+
+<!-- sidebar visual end here -->
+
+
+
+<!-- footer visual start  -->
+
+<div class="footersection py-3 hidden" [ngClass]="customwidth ? 'changewidthnew' : 'changewidth'">
+
+    <p class="Copyright-text">Copilot is powered by Gen AI, so surprises and mistakes are possible. Please share
+        feedback so we can improve! <a routerLink="/">Terms | Privacy | FAQs</a></p>
+</div>
+
+
+
+
+
+<p-dialog class="AddTopicFormResp" [(visible)]="AnswerDisplayDialog" [style]="{width: '40vw',height: '15vw'}"
+    [draggable]="false" [resizable]="true" [modal]="true" [maximizable]="true" (onHide)="onHideDialog()">
+
+    <div>
+        <span class="displayed-questions">{{DisplayQuestions}}</span>
+    </div>
+</p-dialog>
+
+<!-- 
+<p-dialog [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" position="center">
+    <ul>
+        <li>
+            Update Knowledge Base
+        </li>
+        <li>
+            Dark theme
+        </li>
+    </ul>
+</p-dialog> -->
+
+<p-dialog [modal]="true" [(visible)]="visible" [style]="{ width: '60rem',position:'absolute',top:'200px' }">
+    <ng-template pHeader>
+        <!-- Custom header content using the first topic's name -->
+        <h3>{{ topicsdata[0]?.TopicName }}</h3>
+    </ng-template>
+
+    <ul>
+        <li>
+            <h3>{{ topicsdata?.TopicName }}</h3>
+        </li>
+        <li *ngFor="let topic of topicsdata?.slice(0,5)">
+            {{ topic?.TopicName }}
+        </li>
+    </ul>
+</p-dialog>
+
+<p-dialog [(visible)]="visibleLogout"
+    [style]="{ width: '15rem', position:'absolute',top:'75px',right:'20px',padding:'0px' }"
+    headerStyleClass="custom-dialog-header_logout">
+    <div class="logoutModalDiv">
+        <ul class="logoutList">
+            <li>
+                <div (click)="logout()">
+                    <i class="pi pi-sign-out"></i>
+                    <p>
+                        Logout
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</p-dialog>
+
+<p-dialog header="Your Knowledge Base Activity" [modal]="true" [(visible)]="visibleActivity"
+    [style]="{ width: '60rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+    <div class="activityModalOuterDiv">
+        <div class="searchActivityOuter">
+            <input type="text" [(ngModel)]="inputValue" (input)="searchTopicsActivity($event)"
+                placeholder="Search by Activity...." />
+        </div>
+        <p-accordion *ngIf="extraVal.length===0 || extraVal.length===topicsdata.length" [multiple]="true"
+            [activeIndex]="[0]">
+            <p-accordionTab header="Today">
+                <ul class="todayListOuterDiv" *ngFor="let item of topicsdataToday; let i = index">
+                    <p-accordionTab header="{{item.TopicName}}">
+                        <li>
+
+                            <a href="">
+                                {{item.TopicName}}
+                            </a>
+
+                        </li>
+                    </p-accordionTab>
+                </ul>
+                <ul *ngIf="topicsdataToday.length==0" class="todayListOuterDiv">
+                    <li>
+                        <a href="">
+                            No Activity
+                        </a>
+                    </li>
+                </ul>
+            </p-accordionTab>
+            <p-accordionTab header="Yesterday">
+                <ul class="todayListOuterDiv" *ngFor="let item of topicsdataYesderday; let i = index">
+                    <p-accordionTab header="{{item.TopicName}}">
+                        <li>
+
+                            <a href="">
+                                {{item.TopicName}}
+                            </a>
+                        </li>
+
+                    </p-accordionTab>
+                </ul>
+                <ul *ngIf="topicsdataYesderday.length==0" class="todayListOuterDiv">
+                    <li>
+                        <a href="">
+                            No Activity
+                        </a>
+                    </li>
+                </ul>
+
+            </p-accordionTab>
+            <p-accordionTab header="Previous">
+                <ul class="todayListOuterDiv" *ngFor="let item of topicsdatePrevios; let i = index">
+                    <p-accordionTab header="{{item.TopicName}} - ({{item?.CreatedOn?.slice(0,10)}})">
+                        <li id="previousList">
+
+                            <a href="">
+                                {{item.TopicName}}
+                            </a>
+                            <div id="previousInnerDiv">
+                                <p>
+                                    {{item?.CreatedOn?.slice(0,10)}}
+                                </p>
+                                <small>
+                                    {{item?.CreatedOn?.slice(11,16)}}
+                                </small>
+                            </div>
+
+                        </li>
+                    </p-accordionTab>
+                </ul>
+                <ul *ngIf="topicsdatePrevios.length==0" class="todayListOuterDiv">
+                    <li>
+                        <a href="">
+                            No Activity
+                        </a>
+                    </li>
+                </ul>
+            </p-accordionTab>
+        </p-accordion>
+        <div *ngIf="extraVal.length>0 && extraVal.length<topicsdata.length">
+            <ul class="todayListOuterDiv" *ngFor="let item of extraVal; let i = index">
+                <p-accordion [multiple]="true" [activeIndex]="[0]">
+                    <p-accordionTab header="{{item.TopicName}}">
+                        <li>
+                            {{item.TopicName}}
+                        </li>
+                    </p-accordionTab>
+                </p-accordion>
+            </ul>
+        </div>
+        <!-- </div>
+
+</p-dialog> -->
+    </div>
+</p-dialog>
+
+<p-overlayPanel #opLogout>
+    <div class="flex flex-column gap-3 w-15rem">
+        <!-- Close Button (X Icon) -->
+        <div class="close-icon" (click)="opLogout.hide()" style="text-align: right;">
+            <i class="pi pi-times" style="cursor: pointer; font-size: 1.2rem;"></i>
+        </div>
+
+        <div class="logoutModalDiv">
+            <ul class="logoutList">
+                <div class="logout-bg mt-2" style="margin-right: auto; margin-left: auto;">
+                    <!-- <div class="username-text logoutInnerDiv">
+                        {{ getTrimmedShortAliasName() }}
+                    </div> -->
+                    <img class="" style="border-radius: 50px;" src="../../assets/layout/images/loggedUserimage.JPG">
+                </div>
+                <p class="logoutAlisename mt-1">Hi {{ getTrimmedShortAliasName() }}</p>
+                <li>
+                    <div (click)="logout()" class="LogoutButtontext">
+                        <p>Sign Out</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</p-overlayPanel>
+
+
+<app-notification-overlay #opBell [notify]="notificationsdata" [notifyme]="notificationsdatabyme" [UserId]="userId"
+    (totalNotificationCount)="updateNotificationCount($event)"
+    (callParentFunction)="gettopicslistdata($event.requestIds, $event.pageSize, $event.pageNumber, $event.sortBy, $event.sortOrder, $event.userId, $event.searchValue)">
+</app-notification-overlay>
+
+<p-dialog header="Help" [modal]="true" [(visible)]="visibleHelp" [style]="{ }">
+    <div class="helpOuterDiv">
+        <form id="helpCreateForm" action="">
+            <div class="inputFormDiv">
+                <label for="name">First Name <span class="required">*</span></label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="inputFormDiv">
+                <label for="middleName">Middle Name</label>
+                <input type="text" id="middleName">
+            </div>
+            <div class="inputFormDiv">
+                <label for="lastName">Last Name <span class="required">*</span></label>
+                <input type="text" id="lastName">
+            </div>
+            <div class="inputFormDiv">
+                <label for="email">Email <span class="required">*</span></label>
+                <input type="email" id="email">
+            </div>
+            <div class="queryformDiv">
+                <label for="query">Query <span class="required">*</span></label>
+                <textarea name="query" id="query"></textarea>
+            </div>
+            <div class="helpBtnDiv">
+                <button class="helpBtn cancelHelpBtn" (click)="cancelHelp()">Cancel</button>
+                <button class="helpBtn submitHelpBtn" (click)="cancelHelp()">Submit</button>
+            </div>
+        </form>
+    </div>
+</p-dialog>
+
+
+<p-overlayPanel #op5 appendTo="body" [style]="{ position: 'absolute' }" (onShow)="adjustOverlayPosition()">
+    <div class="flex flex-column gap-3 w-15rem">
+        <ul class="helpOverlay">
+            <li (click)="showDialogHelp(op5)">
+                New Help Request
+            </li>
+            <li (click)="openHelpDashboard(op5)">
+                Help Dashboard
+            </li>
+        </ul>
+    </div>
+</p-overlayPanel>
+
+
+
+<p-dialog [(visible)]="SharedPopup" header="Share Chat"
+    [style]="{ width: '40vw', position: 'absolute', height: '30vh' }" [draggable]="false" [resizable]="true"
+    [modal]="true" [maximizable]="true">
+    <div class="chips-container">
+        <!-- Input field -->
+        <input type="text" [(ngModel)]="inputText" (input)="onInputChange($event)"
+            placeholder="Look Up others by Name Or Email" class="chips-input" />
+
+        <!-- Suggestions dropdown -->
+        <div class="suggestions" *ngIf="showSuggestions && suggestions.length > 0">
+            <div *ngFor="let user of suggestions" (click)="addChipFromSuggestion(user)" class="suggestion-item">
+                {{ user.Username }} ({{ user.EmailAddress }})
+            </div>
+        </div>
+
+        <!-- Chips display -->
+        <div class="chips-wrapper">
+            <span class="chip" *ngFor="let chip of chips; let i = index">
+                {{ chip }}
+                <button class="chip-close" (click)="removeChip(i)">
+                    &times;
+                </button>
+            </span>
+        </div>
+    </div>
+    <button class="Sendinvite-btn" (click)="updateChat(topicshareid)">Share</button>
+</p-dialog>

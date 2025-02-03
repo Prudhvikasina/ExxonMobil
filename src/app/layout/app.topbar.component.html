@@ -1,0 +1,254 @@
+<div class="layout-topbar">
+    <div class="layout-topbar-start">
+        <a class="layout-topbar-logo" routerLink="/" (click)="reloadPage()">
+              <img src="../../assets/layout/images/chatbot-image/CPRS-Logo.jpg" class="w-9rem" alt="">
+        </a>
+        <a #menuButton class="layout-menu-button surface-100 text-900" (click)="onMenuButtonClick()" pRipple>
+            <i class="pi pi-chevron-right"></i>
+        </a>
+
+        <a #mobileMenuButton class="layout-topbar-mobile-button" (click)="onMobileTopbarMenuButtonClick()" pRipple>
+            <i class="pi pi-ellipsis-v"></i>
+        </a>
+    </div>
+
+
+
+    <div class="layout-topbar-end">
+        <div class="layout-topbar-actions-start">
+            <!-- <p-megaMenu [model]="model" styleClass="layout-megamenu"></p-megaMenu> -->
+        </div>
+        <div class="layout-topbar-actions-end">
+            <ul class="layout-topbar-items">
+                <!-- <li class="layout-topbar-search">
+                    <a pStyleClass="@next" enterClass="" enterActiveClass="px-scalein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout" [hideOnOutsideClick]="true" pRipple (click)="focusSearchInput()">
+                        <i class="pi pi-search"></i>
+                    </a>
+
+                    <div class="layout-search-panel ng-hidden p-input-filled">
+                        <i class="pi pi-search"></i>
+                        <input #searchInput type="text" pInputText placeholder="Search">
+                        <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-text p-button-plain" pStyleClass=".layout-search-panel" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout"></button>
+                    </div>
+                </li> -->
+
+                
+                <li class="relative">
+                    <span class="wedget-notification">{{notificationTotalCount + notificationSharedTotalCount}}</span>
+                    <a pStyleClass="@next" enterClass="ng-hidden" enterActiveClass="px-scalein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout" [hideOnOutsideClick]="true" pRipple>
+                        <i class="pi pi-bell text-3xl" ></i>
+                    </a>
+                    <div class="ng-hidden">
+                        <p-tabView>
+                            <p-tabPanel header="Shared To Me">
+                                <ul class="list-none p-0 m-0 scroll-notifications">
+                                    <!-- <li *ngFor="let notification of notifications" class="px-3 py-1">
+                                      <span>You have <b>{{ notification.TotalCount }}</b> new notifications</span>
+                                    </li> -->
+                                    <p class="Notification-text mx-3">Notifications</p>
+                                    <li *ngFor="let notification1 of notificationsSharedToMe; let i = index" class="p-3">
+                                      <div class="flex align-items-center">
+                                       
+                                        <!-- Assuming there's no avatarUrl property in the API response -->
+                                        <div class="flex flex-column ml-3 flex-1">
+                                          <div class="flex align-items-center justify-content-between mb-1">
+                                            <p class="Aliasnotification-text">{{notification1.AliasName}}</p>
+                                            <!-- Displaying a combination of first and last names as userName -->
+                                            <span class="fs-small font-bold" style="margin-right: 39px;
+                                            margin-top: -11px;">{{ notification1.FirstName }} {{ notification1.LastName }}</span>
+                                            <small>{{ notification1.Sent }}</small> <!-- Assuming Sent is the time property -->
+                                          </div>
+                                          <span class="text-sm line-height-3">{{ notification1.notificationText }}</span>
+                                          <!-- Assuming there are no actions in the API response -->
+                                          <!-- If actions exist, you need to modify this section -->
+                                          <div class="d-flex">
+                                            <button class="acctptnotifications-btn mt-2" (click)="acceptNotification(notification1,i)">Accept</button>
+                                            <button class="cancelnotifications-btn mt-2 mx-3" (click)="declineNotification(notification1,i)">Decline</button>
+                                          </div>
+                                         
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                            </p-tabPanel>
+                           
+                            <p-tabPanel header="Shared By Me">
+                                <ul class="list-none scroll-notifications">
+                                    <p class="Notification-text mx-3">Notifications</p>
+                                    <li *ngFor="let notification of notifications; let i = index" class="p-3" [hidden]="!notification.isVisible">
+                                        <div class="flex align-items-center">
+                                            <!-- Assuming there's no avatarUrl property in the API response -->
+                                            <div class="flex flex-column ml-3 flex-1">
+                                                <div class="flex align-items-center justify-content-between mb-1">
+                                                    <p class="Aliasnotification-text">{{notification.AliasName}}</p>
+                                                    <!-- Displaying a combination of first and last names as userName -->
+                                                    <span class="fs-small font-bold" style="margin-right: 45px; margin-top: -11px;">
+                                                        {{ notification.FirstName }} {{ notification.LastName }}
+                                                    </span>
+                                                    <small>{{ notification.Sent }}</small> <!-- Assuming Sent is the time property -->
+                                                </div>
+                                                <span class="text-sm line-height-3 d-flex">{{ notification.notificationText }}
+                                                   
+                                                        <i class="fa fa-times close-icon mx-4 p-2" aria-hidden="true" (click)="toggleVisibility(i)" style="cursor: pointer;" (click)="declineNotificationClose(notification,i)"></i>
+                                                   
+                                                </span>
+                                                <!-- Close icon -->
+                                               
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </p-tabPanel>
+                            
+                            
+                        
+                        </p-tabView>
+                        
+                          
+                          
+                    </div>
+                </li>
+
+                <li><span class="flex bg-green-600 px-4 py-1 align-items-center border-round-3xl">
+                    <span class="block pr-2 pt-2">
+                        <img src="../../assets/layout/images/chatbot-image/protected icon.svg" width="14" alt="">
+                    </span>
+                    <span class="block text-white">Protected</span></span></li>
+                <!-- <li>
+                    <a pStyleClass="@next" enterClass="ng-hidden" enterActiveClass="px-scalein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout" [hideOnOutsideClick]="true" pRipple>
+                        <i class="pi pi-table"></i>
+                    </a>
+                    <div class="ng-hidden">
+                        <div class="flex flex-wrap">
+                            <div class="w-4 flex flex-column align-items-center p-3">
+                                <button pButton class="p-button-rounded mb-2" icon="pi pi-image" pRipple></button>
+                                <span>Products</span>
+                            </div>
+                            <div class="w-4 flex flex-column align-items-center p-3">
+                                <button pButton class="p-button-rounded mb-2 p-button-success" icon="pi pi-file-pdf" pRipple></button>
+                                <span>Reports</span>
+                            </div>
+                            <div class="w-4 flex flex-column align-items-center p-3">
+                                <button pButton class="p-button-rounded mb-2 p-button-secondary" icon="pi pi-dollar" pRipple></button>
+                                <span>Balance</span>
+                            </div>
+                            <div class="w-4 flex flex-column align-items-center p-3">
+                                <button pButton class="p-button-rounded mb-2 p-button-warning" icon="pi pi-cog" pRipple></button>
+                                <span>Settings</span>
+                            </div>
+                            <div class="w-4 flex flex-column align-items-center p-3">
+                                <button pButton class="p-button-rounded mb-2 p-button-help" icon="pi pi-key" pRipple></button>
+                                <span>Credentials</span>
+                            </div>
+                            <div class="w-4 flex flex-column align-items-center p-3">
+                                <button pButton class="p-button-rounded mb-2 p-button-info" icon="pi pi-sitemap" pRipple></button>
+                                <span>Sitemap</span>
+                            </div>
+                        </div>
+                    </div>
+                </li> -->
+                <!-- <li>
+                    <a pStyleClass="@next" enterClass="ng-hidden" enterActiveClass="px-scalein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout" [hideOnOutsideClick]="true" pRipple>
+                        <img src="assets/demo/images/avatar/amyelsner.png" alt="avatar" class="w-2rem h-2rem">
+                    </a>
+                    <div class="ng-hidden">
+                        <ul class="list-none p-0 m-0">
+                            <li>
+                                <a class="cursor-pointer flex align-items-center py-2 hover:surface-hover transition-duration-150 transition-all px-3 py-2" pRipple>
+                                    <i class="pi pi-cog mr-2"></i>
+                                    <span>Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="cursor-pointer flex align-items-center py-2 hover:surface-hover transition-duration-150 transition-all px-3 py-2" pRipple>
+                                    <i class="pi pi-file-o mr-2"></i>
+                                    <span>Terms of Usage</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="cursor-pointer flex align-items-center py-2 hover:surface-hover transition-duration-150 transition-all px-3 py-2" pRipple>
+                                    <i class="pi pi-compass mr-2"></i>
+                                    <span>Support</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="cursor-pointer flex align-items-center py-2 hover:surface-hover transition-duration-150 transition-all px-3 py-2" pRipple>
+                                    <i class="pi pi-power-off mr-2"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </li> -->
+                <!-- <li>
+                    <a (click)="onRightMenuButtonClick()" pRipple>
+                        <i class="pi pi-arrow-left"></i>
+                    </a>
+                </li> -->
+                <li>
+                    <!-- <a pStyleClass="@next" enterClass="ng-hidden" enterActiveClass="px-scalein" leaveToClass="ng-hidden"
+                        leaveActiveClass="px-fadeout" [hideOnOutsideClick]="true" pRipple>
+                        <i class="pi pi-user mr-2"></i>
+                        {{ AliasName }}
+                    </a> -->
+
+                    <div class="ng-hidden">
+                        <ul class="list-none p-0 m-0">
+                            <!-- <li>
+                                <a class="cursor-pointer flex align-items-center py-2 hover:surface-hover transition-duration-150 transition-all px-3 py-2"
+                                    pRipple (click)="logout()">
+                                    <i class="pi pi-power-off mr-2"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li> -->
+                            <!-- <li>
+                                <a class="cursor-pointer flex align-items-center py-2 hover:surface-hover transition-duration-150 transition-all px-3 py-2" pRipple>
+                                    <i class="pi pi-cog mr-2"></i>
+                                    <span>Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="cursor-pointer flex align-items-center py-2 hover:surface-hover transition-duration-150 transition-all px-3 py-2" pRipple>
+                                    <i class="pi pi-file-o mr-2"></i>
+                                    <span>Terms of Usage</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="cursor-pointer flex align-items-center py-2 hover:surface-hover transition-duration-150 transition-all px-3 py-2" pRipple>
+                                    <i class="pi pi-compass mr-2"></i>
+                                    <span>Support</span>
+                                </a>
+                            </li> -->
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div *ngIf="acceptSuccess" class="alert alert-success" role="alert">
+    Notification accepted successfully.
+  </div>
+  <div *ngIf="acceptError" class="alert alert-danger" role="alert">
+    Failed to accept notification.
+  </div>
+  
+  <div *ngIf="declineSuccess" class="alert alert-success" role="alert">
+    Notification declined successfully.
+  </div>
+  <div *ngIf="declineError" class="alert alert-danger" role="alert">
+    Failed to decline notification.
+  </div>
+   -->
+  <style>
+    .alert{
+        width: 30%;
+        margin-right: auto;
+        margin-left: auto;
+        color: black;
+    }
+    
+  </style>

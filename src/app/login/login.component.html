@@ -1,0 +1,51 @@
+<div class="Login-backgroun">
+    <!-- Left background image content here -->
+</div>
+
+
+<div class="flex w-full justify-content-center align-items-center" style="margin-top: -580px;">
+    <div class="background-left">
+        <!-- Left background image content here -->
+    </div>
+    
+    <div class=" bg-white h-50rem border-round-3xl pt-8 text-center border-1 border-500 shadow-4 card-details">
+        
+        <img src="../../assets/layout/images/chatbot-image/CPRS-Logo.jpg" class="w-14rem" alt="">
+       
+        <!-- Login Form -->
+        <form (ngSubmit)="login()" #loginForm="ngForm" class="mt-4">
+            <!-- Username Input -->
+            <!-- <div class="mb-4">
+                <input type="text" name="username" placeholder="Username" class="Usernameinput"
+                    [(ngModel)]="loginData.username" required> -->
+                <!-- Validation Error Message -->
+                <!-- <div *ngIf="loginForm.controls['username'].invalid && (loginForm.controls['username'].dirty || loginForm.controls['username'].touched)"
+                    class="text-red-500 text-xs text-left mt-1 mx-4">Username is required</div>
+            </div> -->
+            <!-- Password Input -->
+            <!-- <div class="mb-6">
+                <input type="password" name="password" placeholder="Password" class="Usernameinput"
+                    [(ngModel)]="loginData.password" required> -->
+                <!-- Validation Error Message -->
+                <!-- <div *ngIf="loginForm.controls['password'].invalid && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)"
+                    class="text-red-500 text-xs text-left mt-1 mx-4">Password is required</div>
+            </div> -->
+            <!-- Submit Button -->
+    
+            <div class="logindiv">
+                <!-- <button type="submit" [disabled]="loginForm.invalid" label="NEXT"
+                        class="surface-900 border-900 px-5 py-2 text-base border-1 border-solid border-round cursor-pointer transition-all transition-duration-200 hover:surface-900 text-white hover:border-900 active:surface-900 active:border-primary-700 text-2xl font-normal">
+                        LOG IN
+                </button> -->
+                <button pButton pRipple type="button" label="NEXT" class="p-button-rounded btn-round"
+                routerLink="/chatbot"></button>
+            </div>
+            
+        </form>
+    </div>
+    <div class="background-right">
+        <!-- Right background image content here -->
+    </div>
+</div>
+
+

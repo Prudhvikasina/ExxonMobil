@@ -1,0 +1,49 @@
+#helpdashOuterDiv{
+    height: 86vh;
+    width: 100%;
+    margin-top: 7%;
+    // background-color: midnightblue;
+    // color: white;
+}
+
+::ng-deep .p-datatable .p-datatable-thead > tr > th{
+    background-color:#F4FAFF !important ;
+}
+
+.helpDashTd{
+    // margin: 1rem;
+    padding: 2px 20px;
+    border-radius: 10px;
+}
+
+.reopened-status {
+    background-color: #FFF1F3;
+    color: #89123E;
+  }
+  
+  .closed-status {
+    background-color: #ECFDF3;
+    color: #00FF00;
+  }
+  .in-progress{
+    background-color: #FEF0CC;
+    color: #966B01;
+  }
+  .new{
+    background-color: #FEF3F2;
+    color: #7A271A;
+  }
+  .ticketIdData{
+    font-weight: 700;
+  }
+.helpDashboardTable{
+  margin-left: 64px;
+}
+  
+.fa-arrow-circle-o-left{
+  padding: 5px;
+    /* margin-top: -83px; */
+    // margin-bottom: -27px;
+    font-size: 20px;
+    cursor: pointer;
+}

@@ -1,0 +1,85 @@
+<p-overlayPanel #opBell>
+    <div class="notificationOuterDiv">
+        <div class="notificationHeader">
+            <h4>Notifications</h4>
+            <a (click)="notifyread()" class="mark-all-read">Mark all as read</a>
+        </div>
+        
+        <p-tabView>
+            <!-- Alerts Tab -->
+            <p-tabPanel header="Alerts">
+                <ng-template pTemplate="header">
+                    <div class="custom-tab-header">
+                        Alerts <span class="header-icon">
+                            <p>{{ notify.length }}</p>
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ul class="notifications-container">
+                    <!-- Loop through the notify array to display notifications -->
+                    <li *ngFor="let notification of notify" class="notification-item">
+                        <span class="dot" *ngIf="!notification.IsSeen"></span>
+                        <div class="avatar">{{ notification.FirstName[0]}}{{notification.LastName[0]}}</div>
+                        <div class="content">
+                            <ng-container *ngIf="notification.IsAccepted == null">
+                                <p> 
+                                    <strong>{{ notification.FirstName }} {{ notification.LastName }}</strong> has shared 
+                                    <strong>{{ notification.TopicName }}</strong>. Do you want to save the chat?
+                                </p>
+                                <div class="actions">
+                                    <button class="accept-btn" (click)="accept(notification)">Save</button>
+                                    <button class="decline-btn" (click)="decline(notification)">Dismiss</button>
+                                </div>
+                            </ng-container> 
+                            <ng-container *ngIf="notification.IsAccepted == 1">
+                                <p>
+                                    Saved <strong>{{ notification.TopicName }}</strong> as chat.
+                                </p>
+                            </ng-container>
+                            <ng-container *ngIf="notification.IsAccepted == 0">
+                                <p>
+                                    Dismissed <strong>{{ notification.TopicName }}</strong> as chat.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="time">{{ notification.Sent }}</div>
+                    </li>
+                </ul>
+
+                <div class="view-all">
+                    <p>View All</p>
+                </div>
+            </p-tabPanel>
+
+            <!-- Notify Me Tab -->
+            <p-tabPanel header="Chat Activity">
+                <ng-template pTemplate="header">
+                    <div class="custom-tab-header">
+                        Chat Activity 
+                        <!-- <span class="header-icon">
+                             <p>{{ notifyme.length }}</p>
+                        </span> -->
+                    </div>
+                </ng-template>
+
+                <ul class="notifications-container">
+                    <!-- Loop through the notifyme array to display notifications without actions -->
+                    <li *ngFor="let notification of notifyme" class="notification-item">
+                        <div class="avatar">{{ notification.FirstName[0]}}{{notification.LastName[0]}}</div>
+                        <div class="content">
+                            
+                         You shared <strong> <p>{{ notification.notificationText }}</p> </strong> chat to the  <strong> <p>{{ notification.FirstName }}{{ notification.LastName }}</p> </strong>
+                        </div>
+                        <div class="time">{{ notification.Sent }}</div>
+                    </li>
+                </ul>
+
+                <div class="view-all">
+                    <p>View All</p>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</p-overlayPanel>
+

@@ -1,0 +1,65 @@
+<div [class]="'message-container message-' + Id" [innerHTML]="formattedMessage"></div>
+
+<!-- Image Section -->
+<div class="image-container" *ngIf="images">
+  <div *ngFor="let key of objectKeys(images)">
+    <p-image 
+      [src]="getFormattedImageSrc(images[key])" 
+      [preview]="true" 
+      (onError)="handleImageError($event, key)">
+    </p-image>
+  </div>
+</div>
+  
+<script>
+  window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- Side Menu -->
+<!-- Side Menu -->
+<div class="side-menu" [class.open]="isSideMenuOpen ">
+  <p class="Link-textsidemenu">Links</p>
+
+  <!-- Multiple Document Rendering -->
+  <ng-container *ngIf="selectedDocContents.length > 0">
+    <div *ngFor="let content of selectedDocContents; let i = index" class="document-section">
+      <a
+        href="#DocumentURLCollapse{{ i }}"
+        data-bs-toggle="collapse"
+        class="DocumentsText"
+        (click)="toggleCollapsePinned(i)"
+      >
+        <i [class]="isCollapsedPinned[i] ? 'fa fa-caret-right' : 'fa fa-caret-down'"></i>
+         {{ selectedDocFilePaths[i]  }}
+      </a>
+
+      <div
+        id="DocumentURLCollapse{{ i }}"
+        class="collapse"
+        [class.show]="!isCollapsedPinned[i]"
+        style="border-bottom: 1px solid #e0dfdc;"
+      >
+        <div class="DocumentURLDisplay">
+          <app-chatmesssage-documentrendering [docContent]="content"></app-chatmesssage-documentrendering>
+        </div>
+
+        <!-- Show file path -->
+        <div class="file-path-display">
+          <small>File: {{ selectedDocFilePaths[i] }}</small>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <p *ngIf="!selectedDocContents.length">No document details available</p>
+</div>
+
+
+
+
+

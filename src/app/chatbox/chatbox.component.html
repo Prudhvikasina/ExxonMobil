@@ -1,0 +1,207 @@
+
+<div class="selected-topic-name mx-5" *ngIf="selectedTopicName">
+    <span *ngIf="!isEditing" class="topic-name">
+        {{ selectedTopicName }}
+        <i class="pi pi-pencil edit-icon" (click)="startEditing(selectedTopicName)" title="Edit"
+            aria-label="Edit topic name" tabindex="0" (keydown.enter)="startEditing(selectedTopicName)"></i>
+    </span>
+
+    <input *ngIf="isEditing" type="text" [(ngModel)]="editedTopicName" (blur)="saveTopicName()"
+        (keydown.enter)="saveTopicName()" (keydown.escape)="cancelEditing()" class="edit-input"
+        aria-label="Edit topic name" #topicNameInput (focus)="topicNameInput.select()" />
+</div>
+
+<div class="chatboxsection1" [ngClass]="{ 'move-left': !isSideMenuOpen }" [class.expanded]="isExpanded"
+    *ngIf="!Previewsdisplay">
+
+    <div class="chatsection1" #chatSection>
+
+        <ng-container *ngIf="chatMessages.length > 0; else noMessages">
+
+            <ul class="chatwrap1 scrollForHistory1">
+
+                <!-- <li  *ngFor="let message of chatMessages;let i = index" class="block"> -->
+                <li *ngFor="let message of chatMessageFilter.length === 0 ? chatMessages : chatMessageFilter; let i = index"
+                    class="block">
+                    <ng-container *ngIf="message.sender != 'Copilot'">
+                        <div class="logo_and_name">
+                            <img class="" style="border-radius: 50px;"
+                                src="../../assets/layout/images/loggedUserimage.JPG">
+                        </div>
+
+                    </ng-container>
+
+                    <ng-container *ngIf="message.sender != 'Copilot'">
+                        <div class="message-section">
+                            <div class="message-bubble">
+                                <span class="user-message">{{ message.text }}</span>
+
+                                <div class="time-icon-container">
+                                    <p-toast />
+                                    <!-- <p-button type="button"  label="Contrast"
+                                        severity="contrast" /> -->
+                                    <!-- <i class="fa fa-clone p-2" severity="info" pTooltip="Copy to Clipboard"
+                                        tooltipEvent="focus" tooltipPosition="bottom"
+                                        (click)="showContrast(); displayQuestion(message.text)" aria-hidden="true"></i>
+                                    <i class="fa fa-refresh mx-2" pTooltip="Regenerate" tooltipPosition="bottom"
+                                        aria-hidden="true" (click)="refreshQuestion(message.text)"
+                                        style="cursor: pointer;"></i>
+                                    <span class="time-text" style="font-size: medium;">{{ message.time | date: 'MMM d,
+                                        y, h:mm a'
+                                        }}</span> -->
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="message.sender !== 'Copilot'">
+
+                        <div class="assistant-chat-container">
+
+                            <div class="assistant-left-container">
+                                <img class="assistant-Spinner-main"
+                                    src="../../assets/layout/images/exxon_mobil/chat_logo.png"
+                                    [ngClass]="{'spin-icon': animation && i === chatMessages.length - 1}">
+                                <p class="assistant-your_name">Assistant</p>
+                            </div>
+
+                        </div>
+
+
+                    </ng-container>
+
+                    <ng-container *ngIf="animation && i === chatMessages.length - 1">
+                        <img class="Spinner-main" src="../../assets/layout/images/Number 01.gif">
+                    </ng-container>
+
+                    <ng-container *ngIf="message.sender === 'Copilot'">
+                        <div class="message-container">
+                            <div class="message-content">
+                                <div class="message-text">
+                                    <app-chat-message [message]="message.text" [images]="message.images" [references]='message.reference'
+                                        [Id]="message.TopicquestionanwserId" [apiResponse]="chatMessages"></app-chat-message>
+                                </div>
+                                <div class="time-icon-container">
+                                    <div class="rating">
+                                        <ng-container *ngFor="let i of [1, 2, 3, 4, 5]; let index = index">
+                                            <i class="pi pi-star" [class.pi-star-fill]="message.rating >= (index + 1)"
+                                                (click)="rateMessage(message.TopicquestionanwserId, index + 1)"
+                                                (mouseover)="hoveredRating = index + 1" (mouseleave)="hoveredRating = 0"
+                                                tooltipPosition="bottom" style="cursor: pointer;">
+                                            </i>
+                                        </ng-container>
+                                        <span *ngIf="message.rating > 0">({{message.rating}})</span> <span *ngIf="message.rating == 0">
+                                            (Rate it)</span>
+                                    </div>
+                    
+                                    <i class="fa fa-clone  mx-2" pTooltip="Copy" tooltipPosition="bottom"
+                                        (click)="displayQuestion(message.text)" aria-hidden="true" style="cursor: pointer;"></i>
+                    
+                                    <i class="fa fa-download  mx-2" pTooltip="download" tooltipPosition="bottom" aria-hidden="true"
+                                        (click)="downloadChatAsPDF(message.TopicquestionanwserId)"></i>
+                    
+                                    <i class="fa fa-refresh  mx-2" aria-hidden="true" pTooltip="Regenerate" tooltipPosition="bottom"
+                                        (click)="Regerateclick(message.TopicquestionanwserId, message.Questionmultiple)">
+                                    </i>   
+                                    <i class="pi pi-ellipsis-h" aria-hidden="true" (click)="showOverlayPanel($event, overlayPanel)"></i>                 
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                </li>
+
+            </ul>
+        </ng-container>
+        <p-overlayPanel #op6 #overlayPanel [style]="{ width: '180px' }">
+            <div class="Option-text">
+  <p class="hide-sourcesText" data-bs-toggle="offcanvas" data-bs-target="#rightSidenav" aria-controls="rightSidenav">View Sources</p>
+  <p class="Report-text">Report</p>
+            </div>
+              </p-overlayPanel>
+        <ng-template #noMessages>
+            <div class="no-messages-container">
+                <h2>Hello, {{ displayedAliasName }}</h2>
+                <!-- <h2>
+                    Whats on your mind?
+                </h2> -->
+            </div>
+        </ng-template>
+    </div>
+    <app-document-generator #documentGenerator [topicId]="selectedTopicId" [userId]="userId" [topicName]="topicName">
+    </app-document-generator>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="rightSidenav" aria-labelledby="rightSidenavLabel">
+        <div class="offcanvas-header">
+            <h5 id="rightSidenavLabel">Sources</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let source of sources; let i = index">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="list-box">
+                            <h6>{{ source.title }}</h6>
+                            <a [href]="source.meta"> {{ source.meta }} </a>
+                            <p class="mb-0 text-muted">{{ source.description.slice(0, 100) }}</p>
+                        </div>
+                        <input style="cursor: pointer;" type="checkbox" [(ngModel)]="source.checked" (change)="onCheckboxChange()" />
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div *ngIf="isAnyChecked" class="bottom-button">
+            <button class="btn w-100" (click)="removeCheckedSources()" data-bs-dismiss="offcanvas" style=" background: #64902a; color: white;">
+                Remove
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Suggested Questions -->
+    <div *ngIf="queryform && queryform.get('inputquery')?.value === '' && chatMessages.length === 0">
+        <ul class="SuggestedQuestionsNew ">
+            <div class="card-container-suggetion" *ngIf="secondVisible">
+                <div class="cardSuggestion" style="cursor: pointer;" *ngFor="let question of liveQuestions.slice(0, 4)"
+                    (click)="refreshQuestion(question.Question)">
+                    <div class="question" style="cursor: pointer; font-size: 12px;">{{ question.Question }}</div>
+                </div>
+            </div>
+        </ul>
+    </div>
+    <form [formGroup]="queryform" (ngSubmit)="addqueryhere()" *ngIf="secondVisible"
+        [ngClass]="{ 'move-left': isSideMenuOpen }">
+        <div>
+            <div class="customeinput">
+                <!-- Input field -->
+                <textarea #chatInput type="text" pInputText placeholder="Ask Knowledge Base..." (blur)="onBlur()"
+                    [(ngModel)]="transcribedText" (input)="toggleEnterButton()" (click)="show()"
+                    (keydown.enter)="submitForm()" formControlName="inputquery">
+            </textarea>
+
+            </div>
+            <!-- Microphone and Submit Button -->
+            <div class="speakerEnterDiv" [ngStyle]="{'right': isButtonVisible ? '15%' : '18%'}">
+                <span class="p-0 overflow-hidden text-center my-2"
+                    style="display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <!-- Microphone Icon -->
+                    <img pTooltip="Use Microphone" tooltipPosition="bottom"
+                        src="../../assets/layout/images/AudioSpeakericon.JPG" alt="Microphone" class="microphone"
+                        (click)="toggleRecording()" />
+
+                    <!-- Submit Button -->
+                    <button *ngIf="isButtonVisible" pRipple type="submit" class="cursor-pointer"
+                        style="background-color: inherit;border: none; height: 100%;width: 100%;;">
+                        <img src="../../assets/layout/images/exxon_mobil/Enter_icon.png" alt="Send" width="40px" />
+                    </button>
+                </span>
+            </div>
+
+        </div>
+        <!-- <p [class]="sidebarVisible ? 'doubleCheckParaSid': 'doubleCheckPara'">
+            Knowledge Base can make mistakes, so double-check it.
+        </p> -->
+    </form>
+
+
+</div>

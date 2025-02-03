@@ -1,0 +1,26 @@
+.accer {
+    
+    text-align: center;
+    padding:6%; background: #fff;
+    margin:50px; box-sizing: border-box;
+}
+.accer .accer-tile { font-size: 30px;
+    color: #ff0000;
+     }
+.accer .accer-desc { font-size: 15px;  padding: 20px;}
+.accer .acctxt { font-size: 80px; font-weight: 800; }
+
+
+
+.card_div{
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
+.bg-site {
+    //..../../layout/images/bg-login.jpg
+    background: url(../../../assets/layout/images/bg-login.jpg) center top no-repeat;
+    height: 100vh;
+    background-size: cover;
+}

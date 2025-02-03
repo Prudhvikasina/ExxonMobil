@@ -1,0 +1,118 @@
+// Button styling
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: #45a049;
+    }
+  }
+  
+  // Message container for chat messages
+  .message-container {
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    padding-left: 1rem;
+    margin-bottom: 8px;
+  
+    h2 {
+      font-size: 1.2rem;
+    }
+  
+    p {
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+  
+    ul li {
+      list-style: disc;
+    }
+  
+    .chat-image {
+      width: 80%;            // Adjust width
+      max-width: 100%;        // Ensures it doesn’t overflow container
+      height: auto;           // Maintains aspect ratio
+      object-fit: cover;      // Prevents distortion
+      border-radius: 8px;     // Rounded corners for images
+    }
+  
+    .latex-inline {
+      font-size: 1em;
+    }
+  
+    .latex-block {
+      text-align: center;
+      margin: 1em 0;
+    }
+  
+    table {
+      width: 100%;
+      border-collapse: collapse !important;
+      margin-top: 20px !important;
+    }
+  
+    th, td {
+      border: 1px solid black !important;
+      padding: 4px !important;
+      text-align: center !important;
+    }
+  
+    th {
+      background-color: #f2f2f2 !important;
+    }
+  
+    tbody tr:hover {
+      background-color: #f5f5f5 !important;
+    }
+  
+    .link {
+      text-decoration: underline;
+      color: blue;
+  
+      &:hover {
+        text-decoration: none;
+        color: darkblue;
+      }
+    }
+  }
+  
+  // Special text styling for emphasized text
+  .specialtext {
+    padding-left: 2rem;
+    font-weight: 400;
+  }
+  
+  // Image container styling
+  .image-container {
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    padding-left: 1rem;
+    margin-bottom: 8px;
+  
+    h4 {
+      font-size: 1.2rem;
+    }
+  
+    span {
+      display: flex;
+      justify-content: center;
+      padding: 10px;
+  
+      > img {
+        width: 50%;
+      }
+    }
+  }
+  
+  // Style for deep images in the chat
+  ::ng-deep .chat-image {
+    display: inline-block !important;
+    width: 100% !important;
+  }
+  

@@ -1,0 +1,109 @@
+<!-- <div class="layout-container" [ngClass]="containerClass" *ngIf="authenticated">
+
+    <app-topbar></app-topbar>
+    <app-rightmenu></app-rightmenu>
+    <app-sidebar></app-sidebar>
+
+    <div class="layout-content-wrapper pt-8 ">
+        <app-breadcrumb></app-breadcrumb>
+
+        <div class="layout-content p-0">
+            <router-outlet *ngIf="authenticated"></router-outlet>
+        </div> -->
+
+<!-- <app-footer></app-footer> -->
+<!-- </div>
+    <app-config></app-config> -->
+
+<!-- <div *ngIf="layoutService.state.staticMenuMobileActive" class="layout-mask"></div>
+   
+</div> -->
+
+
+<div class="layout-container" [ngClass]="containerClass">
+    <div class="layout-content-wrapper" *ngIf="authenticated">
+        <div class="layout-content">
+            <!-- style="padding: 2rem 2rem 0rem;" -->
+            <!-- <app-login></app-login> -->
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+    <!-- <app-footer *ngIf="authenticated"></app-footer> -->
+
+    <div *ngIf="layoutService.state.staticMenuMobileActive" class="layout-mask"></div>
+
+    <div class="background-section justify-center body-screen" *ngIf="!authenticated"  style="display: none;">
+        <div class="Login-backgroun">
+        </div>
+        <div class="backgrounded flex w-full justify-content-center align-items-center">
+            <div class="background-left">
+            </div>
+            <div
+                class=" bg-white h-500rem border-round-3xl pt-8 text-center border-1 border-500 shadow-4 card-details h-  bgOuterDiv">
+                <img src='../../assets/layout/images/exxon_mobil/logo.png' class="w-14rem" alt="Exxon Img">
+                <div class="logindiv">   
+                    <div class="background-body-section">
+                        <p
+                            style="font-weight: bolder;font-size: large;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-left: -119px;">
+                           Sign in to your Account
+                        </p>
+                      
+                            <div class="mb-3">
+                              <label for="email" class="form-label labelname">Email or Phone</label>
+                              <input type="email" class="form-control PhoneNumberInput" id="email"  name="email">
+                            </div>
+                            <div class="mb-3">
+                              <label for="pwd" class="form-label labelname">Password </label>
+                              <input type="password" class="form-control PhoneNumberInput" id="pwd"  name="pswd">
+                            </div>
+                        <div class="bgBtnDiv">
+                            <button pButton pRipple type="button" label="Sign in"
+                                class="surface-900 border-900 px-5 py-2 text-base border-1 border-solid border-round cursor-pointer transition-all transition-duration-200 hover:surface-900 text-white hover:border-900 active:surface-900 active:border-primary-700 text-2xl font-normal loginMainBtn"
+                                (click)="loginAuthentication()"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="background-right">
+                <!-- Right background image content here -->
+            </div>
+        </div>
+    </div>
+
+
+    <div class="banner-bg" *ngIf="!authenticated">
+        <div class="banner-bg-top"></div>
+        <div class="login-container">
+          <div class="row justify-content-center align-items-center h-100">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+              <div class="card custom-login-Card">
+                <div class="card-body custom-login-body">
+                  <div class="text-center mb-4">
+                    <img src="../../assets/layout/images/exxon_mobil/New_exxonMobil-logo.png" class="w-14rem" alt="exxon_mobil_logo" />
+                  </div>
+                  <h2 class="card-title sign-in-title p-3 mt-0">Sign in to your Account</h2>
+                    
+                    <div class="mb-4">
+                      <label for="email" class="form-label labelname">Email or Phone</label>
+                      <input type="email" class="form-control custom_inputs" id="email" name="email"  required >
+                    </div>
+
+                    <div class="mb-4">
+                      <label for="password" class="form-label labelname">Password</label>
+                      <input type="password" class="form-control custom_inputs" id="password" name="password"  required>
+                    </div>
+
+                    <div class="login-button-container">
+                      <button pButton pRipple type="submit" label="Sign in" class="login-button" (click)="loginAuthentication()"></button>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+</div>

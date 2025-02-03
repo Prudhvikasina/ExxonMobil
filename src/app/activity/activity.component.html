@@ -1,0 +1,240 @@
+
+
+<div class="activityOuterContainer">
+  
+    <!-- <div class="searchActivityOuter">
+        <div class="filterOuterDiv">
+            <p>
+                Filter By 
+            </p>
+            <p-dropdown 
+            [options]="datesValue" 
+            [(ngModel)]="selectedDatesValue" 
+            optionLabel="dateValue"
+            (onChange)="onDateChange($event)"
+            placeholder="filter by date" />
+        </div>
+       
+    </div> -->
+    <div class="activityModalOuterDiv">
+        <h3 style="font-weight: 600;"  (click)="closeActivity()">
+            <i class="fa fa-arrow-circle-o-left Activitytext" aria-hidden="true"></i>  Activity
+           </h3>
+        <!-- <p class="Activitytext">Activity</p> -->
+        <div class="search-container">
+            <i class="fa fa-search search-icon"></i>
+            <input
+              class="searchinputfield"
+              type="text"
+              [(ngModel)]="inputValue"
+              (input)="sendMessageToParent($event)"
+              placeholder="Search by Activity...."
+            />
+          </div>
+          
+        <!-- <p-accordion *ngIf="filteredActivityValue.length===0 || filteredActivityValue.length===topicsdata.length" [multiple]="true"
+            [activeIndex]="[0]">
+            <p-accordionTab header="Today">
+                <ul class="todayListOuterDiv" *ngFor="let item of topicsdataToday; let i = index">
+                    <p-accordionTab header="{{item.TopicName}}">
+                        <li (click)="calltoggleActivity(item.TopicName,item.TopicId)">
+                            
+                            <a >
+                                {{item.TopicName}}
+                            </a>
+
+                        </li>
+                    </p-accordionTab>
+                </ul>
+                <ul *ngIf="topicsdataToday.length==0" class="todayListOuterDiv">
+                    <li>
+                        <a href="">
+                            No Activity
+                        </a>
+                    </li>
+                </ul>
+            </p-accordionTab>
+            <p-accordionTab header="Yesterday">
+                <ul class="todayListOuterDiv" *ngFor="let item of topicsdataYesderday; let i = index">
+                    <p-accordionTab header="{{item.TopicName}}">
+                        <li>
+                           
+                            <a href="">
+                                {{item.TopicName}}
+                            </a>
+                        </li>
+
+                    </p-accordionTab>
+                </ul>
+                <ul *ngIf="topicsdataYesderday.length==0" class="todayListOuterDiv">
+                    <li>
+                        <a href="">
+                            No Activity
+                        </a>
+                    </li>
+                </ul>
+
+            </p-accordionTab>
+            <p-accordionTab header="Previous">
+                <ul class="todayListOuterDiv" *ngFor="let item of topicsdatePrevios; let i = index">
+                    <p-accordionTab header="{{item.TopicName}} - ({{item?.CreatedOn?.slice(0,10)}})">
+                        <li id="previousList">
+                            
+                            <a href="">
+                                {{item.TopicName}}
+                            </a>
+                            <div id="previousInnerDiv">
+                                <p>
+                                    {{item?.CreatedOn?.slice(0,10)}}
+                                </p>
+                                <small>
+                                    {{item?.CreatedOn?.slice(11,16)}}
+                                </small>
+                            </div>
+
+                        </li>
+                    </p-accordionTab>
+                </ul>
+                <ul *ngIf="topicsdatePrevios.length==0" class="todayListOuterDiv">
+                    <li>
+                        <a href="">
+                            No Activity
+                        </a>
+                    </li>
+                </ul>
+            </p-accordionTab>
+        </p-accordion> -->
+        <!-- <div *ngIf="filteredActivityValue.length>0 && filteredActivityValue.length<topicsdata.length">
+            <ul class="todayListOuterDiv" *ngFor="let item of filteredActivityValue; let i = index">
+                <p-accordion [multiple]="true" [activeIndex]="[0]">
+                    <p-accordionTab header="{{item.TopicName}}">
+                        <li>
+                            {{item.TopicName}}
+                        </li>
+                    </p-accordionTab>
+                </p-accordion>
+            </ul>
+        </div> -->
+        <!-- </div>
+
+</p-dialog> -->
+
+<div class="activity-container mt-3">
+    <div class="card-header">
+      <p class="prompt-text">Prompt</p>
+      <div class="info-container">
+        <p class="chat-text">Chat</p>
+        <div class="right-section">
+          <span class="createdby-text">Created By</span>
+          <span class="timeactivity-text">Time of Activity</span>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Today Section -->
+    <div *ngIf="topicsdataToday.length > 0">
+      <!-- <div class="section-header">Today</div> -->
+      <div class="prompt-container box shadow" *ngFor="let item of topicsdataToday">
+        <div class="prompt">
+          <div class="prompt-header">
+            <p class="prompt-title" (click)="navigateToChatbox(item.name, item.id)">
+              {{ item.TopicName }}
+              <br />
+              <span class="categorytext">Category: Today</span>
+            </p>
+            <span class="prompt-createdby">{{ item.CreatedBy || 'N/A' }}</span>
+            <span class="prompt-time">{{ item.CreatedOn?.slice(11, 16) || 'N/A' }}</span>
+          </div>
+          <div class="details-container">
+            <button class="details-btn mt-2" (click)="item.isCollapsed = !item.isCollapsed">
+              <span class="details-text">
+                {{ item.isCollapsed ? 'Show Details' : 'Hide Details' }}
+              </span>
+              <span class="details-icon">
+                <i [class]="item.isCollapsed ? 'fa fa-caret-down' : 'fa fa-caret-up'" aria-hidden="true"></i>
+              </span>
+            </button>
+            <div class="details-content" [ngClass]="{ 'collapse': item.isCollapsed }">
+              <p>{{ item.Details || 'No details available' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div *ngIf="topicsdataToday.length === 0" class="no-activity">
+      No activity for Today
+    </div> -->
+  
+    <!-- Yesterday Section -->
+    <div *ngIf="topicsdataYesderday.length > 0">
+      <!-- <div class="section-header">Yesterday</div> -->
+      <div class="prompt-container box shadow" *ngFor="let item of topicsdataYesderday">
+        <div class="prompt">
+          <div class="prompt-header">
+            <p class="prompt-title">
+              {{ item.TopicName }}
+              <br />
+              <span class="categorytext">Category: Yesterday</span>
+            </p>
+            <span class="prompt-createdby">{{ item.CreatedBy || 'N/A' }}</span>
+            <span class="prompt-time">{{ item.CreatedOn?.slice(11, 16) || 'N/A' }}</span>
+          </div>
+          <div class="details-container">
+            <button class="details-btn mt-2" (click)="item.isCollapsed = !item.isCollapsed">
+              <span class="details-text">
+                {{ item.isCollapsed ? 'Show Details' : 'Hide Details' }}
+              </span>
+              <span class="details-icon">
+                <i [class]="item.isCollapsed ? 'fa fa-caret-down' : 'fa fa-caret-up'" aria-hidden="true"></i>
+              </span>
+            </button>
+            <div class="details-content" [ngClass]="{ 'collapse': item.isCollapsed }">
+              <p>{{ item.Details || 'No details available' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div *ngIf="topicsdataYesderday.length === 0" class="no-activity">
+      No activity for Yesterday
+    </div> -->
+  
+    <!-- Previous Section -->
+    <div *ngIf="topicsdatePrevios.length > 0">
+      <!-- <div class="section-header">Previous</div> -->
+      <div class="prompt-container box shadow" *ngFor="let item of topicsdatePrevios">
+        <div class="prompt">
+          <div class="prompt-header">
+            <p class="prompt-title">
+              {{ item.TopicName }}
+              <br />
+              <span class="categorytext">Date: {{ item.CreatedOn?.slice(0, 10) }}</span>
+            </p>
+            <span class="prompt-createdby">{{ item.CreatedBy || 'N/A' }}</span>
+            <span class="prompt-time">{{ item.CreatedOn?.slice(11, 16) || 'N/A' }}</span>
+          </div>
+          <div class="details-container">
+            <button class="details-btn mt-2" (click)="item.isCollapsed = !item.isCollapsed">
+              <span class="details-text">
+                {{ item.isCollapsed ? 'Show Details' : 'Hide Details' }}
+              </span>
+              <span class="details-icon">
+                <i [class]="item.isCollapsed ? 'fa fa-caret-down' : 'fa fa-caret-up'" aria-hidden="true"></i>
+              </span>
+            </button>
+            <div class="details-content" [ngClass]="{ 'collapse': item.isCollapsed }">
+              <p>{{ item.Details || 'No details available' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div *ngIf="topicsdatePrevios.length === 0" class="no-activity">
+      No activity for Previous
+    </div> -->
+  </div>
+  
+  
+
+
+</div>
